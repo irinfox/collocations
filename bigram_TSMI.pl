@@ -3,21 +3,24 @@ use Encode;
 use File::Basename;
 
 binmode(STDOUT, ":encoding(utf8)");
+#перекодировка вывода в консоль
 
 $file_name = shift @ARGV || die "you should input file$!";
 $main_output = $file_name;
-
+#переменные для входного и выходного файлов
 
 
 
 print "main_output $main_output \n";
   
 print "In God We Trust \n";
+#печать в консоль текущих состояний
 
 sub log2 {
  my $n = shift;
  return log($n)/log(2);
 }
+#подпрограмма для логарифма. Переход от логарифма с натуральным основанием к логарифму с двоичным.
 
  print "read file $file_name \n";
 
@@ -27,10 +30,11 @@ binmode(IN, ":encoding(utf8)");
 
 @list = <IN>;
 close IN;
+#запись входного файла в массив list
 
 $N = @list; # число словоупотреблений
 $logN = log2($N);
-
+#далее используется для расчёта Mutual Information
 
 chomp @list;
 
@@ -38,7 +42,7 @@ for ($i=0; $i <= $N; $i++) {
  chomp $list[$i];
  $count{$list[$i]}++;
 }
-
+#составление частотного словаря
 
 
 # Двухсловные
@@ -54,15 +58,15 @@ for ($i=0; $i <= $N-1; $i++) {
 
 
 %MI_colloc = MI( \%count_colloc, \%count, 3);
-
+#вызов подпрограмм MI и t-score со ссылками на hash с частотами словосочетаний, с частотами лексем и границей отсечения
 %TS_colloc = TScore( \%count_colloc, \%count, 3);
 
 $output = "2_TSMI_all_" . $main_output;
-
+# присваивание имени выходному файлу
 open (LIST, ">$output");
 binmode(LIST, ":encoding(utf8)");
 print LIST "коллокация" . "\t\t" . "частота" . "\t" . "MI" . "\t" . "t-score" . "\n"; 
-
+#верхняя строка выходного файла
 $i = 0;
 
 # foreach $colloc (sort { $MI_colloc{$b} <=> $MI_colloc{$a} || $a cmp $b} keys %MI_colloc) {
@@ -78,7 +82,7 @@ foreach $colloc (sort { $TS_colloc{$b} <=> $TS_colloc{$a} || $a cmp $b} keys %TS
 #$i++;
 }
 close LIST;
-
+#сортировка по значениям MI по убыанию, при совпадении значений сортировка по алфавиту
 print "DONE \n";
 
 
@@ -89,6 +93,7 @@ sub MI {
   # а также границу отсечения по частоте (MI считается для наиболее частотных)
 
   my ($colloc_freq, $word_freq, $bound) = @_;
+  #создание переменных для переданных ссылок
   my %MI;
 
  # $bound = $bound / $N;
@@ -108,6 +113,7 @@ sub MI {
 	  chomp $word;
 
 	  if ($word =~ /[A-Z]|[a-z]/) {
+	#отсечение слов, написанных на латинице
 	   $denominator = 0;
 	   }else{
 	  $denominator = $denominator * $$word_freq{$word};

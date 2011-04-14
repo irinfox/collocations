@@ -6,7 +6,7 @@ binmode(STDOUT, ":encoding(utf8)");
  $file_name = @ARGV[0] || die "$! \n usage: FILE_NAME w|l";
 
  $param = @ARGV[1] || die "$! \n usage: FILE_NAME w(ord)|l(emma)";
-
+#переменные для первого (лемматизированный файл) и второго (словоформы, лексемы) параметров
 
 #($file_name, $param) = @ARGV || die "$! \n usage: FILE_NAME 0|1";
 
@@ -16,6 +16,7 @@ $main_output = $file_name;
 print "read file $file_name \n";
 
 open (IN, "<$file_name") || die $!;
+#создание частотных словарей для 1-5грамм
 binmode (IN, ":encoding(utf8)");
 
 $mln = 0;
@@ -45,9 +46,12 @@ $x = $variants[1];
 #if ($x =~ /\W/ || $x_1 =~ /\W/ || $x_2 =~ /\W/ || $x_3 =~ /\W/ || $x_4 =~ /\W/) {next;}
 #if ($x =~ /[a-zA-Z]/ || $x_1 =~ /[a-zA-Z]/ || $x_2 =~ /[a-zA-Z]/) {next;}
 
+#my $punct = /(\.|\;|\:|\"|\'|\!|\?|\(|\)|\,|\-|\\|\/|\)/ 
 
-unless ($x =~ /(\.|\;|\:|\"|\'|\!|\?|\(|\)|\,|\-|\\|\/|\„|\Ѓ|\»|\«|\—|\~|\[|\]|\{|\}|\||\*|\+)/)  {
 
+unless ($x =~ /(\.|\;|\:|\"|\'|\!|\?|\(|\)|\,|\-|\\|\/|\„|\Ѓ|\»|\«|\—|\~|\[|\]|\{|\}|\||\*|\+)/) {
+#unless ($x =~ $punct) {
+#если переменная не содержит знаки препинания, осуществляется дальнейшая обработка
 $N_words++;
 
 $p1{$x}++;
@@ -85,7 +89,7 @@ $p5{$five}++;
 close IN;
 
 $logN = log2($N_words);
-
+#логарифм от всех словоупотреблений
 print "\n N: $N\n";
 print "N_words: $N_words\n";
 print "print freqs \n";
@@ -107,6 +111,7 @@ foreach $x ( sort {$p1{$b} <=> $p1{$a} || $a cmp $b} keys(%p1)) {
 }
 close OUT;
 #%p1 = ();
+#частотный словарь с абс., относител. частотами и ipm для однословных конструкций с сортировкой по значениям
 
 
 ###########################################
@@ -124,18 +129,18 @@ foreach $bi (sort {$p2{$b} <=> $p2{$a} || $a cmp $b} keys(%p2)) {
  print OUT $bi . "\t\t" . $p2{$bi} . "\t" . $freq_rel . "\t" . $ipm . "\n"; 
 }
 close OUT;
-
+#такой же, как и выше, частотный словарь для биграмм
 print "2_MI  2_TS \n";
 
 %MI_colloc = MI( \%p2, \%p1, 3);
 print_MI (\%p2, \%MI_colloc, "_MI_2_$main_output");
 %TS_colloc = TScore( \%p2, \%p1, 3);
 print_TS (\%p2, \%TS_colloc, "_TS_2_$main_output");
-
+#запуск программ MI и t-score. Для успешной работы программ, им нужно передать ссылку на hash с частотами словосочетаний и ссылку на hash с частотами лексем, а также границу отсечения по частоте (MI считается для наиболее частотных)
 %TS_colloc = {};
 %MI_colloc = {};
 %p2 = {};
-
+#Обнуление hash'a для освобождения памяти
 
 ############################################
 print "print 3_words freq \n";
@@ -155,6 +160,7 @@ foreach $tri (sort {$p3{$b} <=> $p3{$a} || $a cmp $b} keys(%p3)) {
  print OUT $tri . "\t\t" . $p3{$tri} . "\t" . $freq_rel . "\t" . $ipm . "\n"; 
 }
 close OUT;
+#всё то же самое для 3грамм
 #%p3 = ();
 
 print "3_MI \n";
@@ -185,7 +191,7 @@ foreach $four (sort {$p4{$b} <=> $p4{$a} || $a cmp $b} keys(%p4)) {
 
 }
 close OUT;
-
+#частотный словарь для 4грамм
 print "4_MI \n";
 
 %MI_colloc = MI( \%p4, \%p1, 3);
@@ -212,7 +218,7 @@ foreach $five (sort {$p5{$b} <=> $p5{$a} || $a cmp $b} keys(%p5)) {
  print OUT $five . "\t\t" . $p5{$five} . "\t" . $freq_rel . "\t" . $ipm . "\n"; 
 }
 close OUT;
-
+#частотный словарь для 5грамм
 print "5_MI \n";
 
 %MI_colloc = MI( \%p5, \%p1, 3);
@@ -227,7 +233,7 @@ sub log2 {
  my $n = shift;
  return log($n)/log(2);
 }
-
+#подпрограмма для логарифма. Переход к основанию 2 от е
 
 
 sub MI {
