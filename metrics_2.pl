@@ -1,3 +1,4 @@
+#подсчёт MI и t-score для биграмм. NB! подробности запуска программы см. в документации
 use utf8;
 use Encode;
 use File::Basename;
@@ -7,40 +8,47 @@ binmode(STDOUT, ":encoding(utf8)");
 $file_1 = shift @ARGV || die "you should input file_1, file_2 and result_file$!";
 $file_2 = shift @ARGV || die "you should input file_1, file_2 and result_file$!";
 $result_file = shift @ARGV || die "you should input file_1, file_2 and result_file$!";
-
+#создание переменных для входных и выходных файлов
 print "read words $file_1\n";
-
+#печать текущих состояний
 open (ONE, "$file_1");
 binmode(ONE, ":encoding(utf8)");
-
+#открываем первый входной файл (с однословными конструкциями)
 while (<ONE>) {
 chomp;
 ($word, $freq) = split;
+#разбиваем словарь на ключ и значение по пробелу
 $p1{$word} = $freq;
+#записываем в значение p1 к ключу word частоту freq
 $N = $N+$freq;
+#складываем частоты
 }
 
 sub log2 {
  my $n = shift;
  return log($n)/log(2);
 }
+#подпрограмма для логарифма. Переход от основания e к 2.
 close ONE;
 $logN = log2($N);
-
+#считаем логарифм по всему документу. Используется в MI.
 print "N: $N log2N: $logN \n";
 
 print "read colloc $file_2\n";
 
 open (BI, "$file_2");
 binmode(BI, ":encoding(utf8)");
-
+#открываем второй входной файл (с биграммами)
 while (<BI>) {
 chomp;
 ($word1, $word2, $freq) = split;
+#разбиваем словарь по пробелам, присваивая первому и второму словам и частоте переменные, соответственно
   if ($freq < 40) {last;} 
  $colloc = $word1 . "\t" . $word2;
+#склеиваем первое и второе слово и запоминаем результат склеивания в переменную colloc
  # print "colloc: $colloc freq: $freq \n";
  $p2{$colloc} = $freq;
+#записываем к каждой коллокации её частоту
 }
 
 close BI;
@@ -49,13 +57,13 @@ close BI;
 %MI_colloc = MI( \%p2, \%p1, 0);
 print_MI (\%p2, \%MI_colloc, "2_MI_$result_file");
 %MI_colloc = ();
-
+#вызов подпрограммы MI и print_MI, освобождение переменной MI_colloc
 %TS_colloc = TScore( \%p2, \%p1, 0);
 print_TS (\%p2, \%TS_colloc, "2_TS_$result_file");
 %TS_colloc = ();
 %p2 = ();
 %p1 = ();
-
+#вызов подпрограммы t-score и print_TS, освобождение переменных TS_colloc, %p2, %p1
 print "DONE \n";
 
 sub MI {
