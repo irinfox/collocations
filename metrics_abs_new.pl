@@ -1,12 +1,14 @@
+#программа считает абс. частоты, MI и t-score для 1-5 грамм, выводит на печать только 1-2граммы. Работает с файлом через запись его в массив.
+
 use utf8;
 use Encode;
 use File::Basename;
 
 binmode(STDOUT, ":encoding(utf8)");
 
-$file_name = shift @ARGV || die "you should input file$!";
+$file_name = shift @ARGV || die "you should input file$!"; 
 $main_output = $file_name;
-
+#объявление переменных для входного и выходного файлов
 
 
 
@@ -18,6 +20,7 @@ sub log2 {
  my $n = shift;
  return log($n)/log(2);
 }
+#подпрограмма для log, переход от основания e к основанию 2
 
  print "read file $file_name \n";
 
@@ -27,6 +30,7 @@ binmode(IN, ":encoding(utf8)");
 
 @list = <IN>;
 close IN;
+#Запись входного файла в массив
 
 $N = @list; # число словоупотреблений
 $logN = log2($N);
