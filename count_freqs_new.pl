@@ -10,7 +10,7 @@ binmode(STDOUT, ":encoding(utf8)");
 
 #($file_name, $param) = @ARGV || die "$! \n usage: FILE_NAME 0|1";
 
-$main_output = $file_name;
+$main_output = $file_name . "_" . $param;
 
 
 print "read file $file_name \n";
