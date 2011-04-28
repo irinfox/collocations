@@ -134,9 +134,9 @@ close OUT;
 print "2_MI  2_TS \n";
 
 %MI_colloc = MI( \%p2, \%p1, 3);
-print_MI (\%p2, \%MI_colloc, "_MI_2_$main_output");
+print_Metric (\%p2, \%MI_colloc, "_MI_2_$main_output");
 %TS_colloc = TScore( \%p2, \%p1, 3);
-print_TS (\%p2, \%TS_colloc, "_TS_2_$main_output");
+print_Metric (\%p2, \%TS_colloc, "_TS_2_$main_output");
 #запуск программ MI и t-score. Для успешной работы программ, им нужно передать ссылку на hash с частотами словосочетаний и ссылку на hash с частотами лексем, а также границу отсечения по частоте (MI считается для наиболее частотных)
 %TS_colloc = {};
 %MI_colloc = {};
@@ -167,7 +167,7 @@ close OUT;
 print "3_MI \n";
 
 %MI_colloc = MI( \%p3, \%p1, 3);
-print_MI (\%p3, \%MI_colloc, "_MI_3_$main_output");
+print_Metric (\%p3, \%MI_colloc, "_MI_3_$main_output");
 
 %MI_colloc = {};
 %p3= ();
@@ -196,7 +196,7 @@ close OUT;
 print "4_MI \n";
 
 %MI_colloc = MI( \%p4, \%p1, 3);
-print_MI (\%p4, \%MI_colloc, "_MI_4_$main_output");
+print_Metric (\%p4, \%MI_colloc, "_MI_4_$main_output");
 
 %MI_colloc = {};
 %p4= ();
@@ -223,7 +223,7 @@ close OUT;
 print "5_MI \n";
 
 %MI_colloc = MI( \%p5, \%p1, 3);
-print_MI (\%p5, \%MI_colloc, "_MI_5_$main_output");
+print_Metric (\%p5, \%MI_colloc, "_MI_5_$main_output");
 
 %MI_colloc = {};
 %p5 = {};
@@ -280,32 +280,6 @@ sub MI {
  return %MI;
 }
 
-
-sub print_MI {
- # Подпрограмма для печати MI
- # Ей передается сылка на хэш с частотами и ссылка на хэш с MI,
- # а также имя выходного файла
-
- my ($colloc_freq, $MI, $output) = @_;
-
-  print "print MI $colloc_freq, $MI, $output \n";
-
-   open (LIST, ">$output");
-
-   binmode(LIST, ":encoding(utf8)");
-
-   print LIST "colloc \t\t\t freq \t MI \n\n";
-   
-   foreach $colloc (sort { $$MI{$b} <=> $$MI{$a} || $a cmp $b} keys %$MI )
-   {
-    print LIST $colloc . "\t" . $$colloc_freq{$colloc} . "\t" . $$MI{$colloc} . "\n";
-   }
-   close LIST;
-
-}
-
-
-
 sub TScore {
   # Подпрограма для подсчета t-score
   # Ей надо передать ссылку на хэш с частотами словосочетаний и ссылку на хэш с частотами лексем,
@@ -352,25 +326,32 @@ sub TScore {
 
 
 
-sub print_TS {
- # Подпрограмма для печати t-score
- # Ей передается сылка на хэш с частотами и ссылка на хэш с MI,
+sub print_Metric {
+ # Подпрограмма для печати метрик MI и t-score
+ # Ей передается сылка на хэш с частотами и ссылка на хэш с метриками,
  # а также имя выходного файла
 
- my ($colloc_freq, $TS, $output) = @_;
+ my ($colloc_freq, $Metric, $output) = @_;
 
- print "print TS $colloc_freq, $TS, $output \n";
+	if ($Metric == \%TS_colloc){
+		 print "print TS $colloc_freq, $Metric, $output \n";
+	}
+	if ($Metric == \%MI_colloc){
+		print "print MI $colloc_freq, $Metric, $output \n";
+	}
 
-   open (LIST, ">$output");
+   	open (LIST, ">$output");
 
-   binmode(LIST, ":encoding(utf8)");
-
-   print LIST "colloc \t\t\t freq \t t-score \n\n";
-
-   foreach $colloc (sort { $$TS{$b} <=> $$TS{$a} || $a cmp $b} keys %$TS )
-   {
-    print LIST $colloc . "\t" . $$colloc_freq{$colloc} . "\t" . $$TS{$colloc} . "\n";
-   }
-   close LIST;
+   	binmode(LIST, ":encoding(utf8)");
+   	if ($Metric == \%TS_colloc){
+ 		print LIST "colloc \t\t\t freq \t t-score \n\n";
+  	 }
+   	if ($Metric == \%MI_colloc){
+		print LIST "colloc \t\t\t freq \t MI \n\n";
+   	}	
+  	 foreach $colloc (sort { $$Metric{$b} <=> $$Metric{$a} || $a cmp $b} keys %$Metric ) {
+    		print LIST $colloc . "\t" . $$colloc_freq{$colloc} . "\t" . $$Metric{$colloc} . "\n";
+   	}
+   	close LIST;
 
 }
