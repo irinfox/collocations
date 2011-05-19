@@ -4,8 +4,7 @@ use Encode;
 binmode(STDOUT, ":encoding(utf8)");
 
 $file_name = shift @ARGV || die "$! \n usage: FILE_NAME";
-$main_output = $file_name . "_nouns_adj_words";
-
+$main_output = $file_name . "_nouns_adj"; 
 
 print "read file $file_name \n";
 

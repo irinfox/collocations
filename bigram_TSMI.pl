@@ -14,7 +14,7 @@ $main_output = $file_name;
 print "main_output $main_output \n";
   
 print "In God We Trust \n";
-#печать в консоль текущих состояний
+#печать текущих состояний в консоль
 
 sub log2 {
  my $n = shift;
