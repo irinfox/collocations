@@ -2,41 +2,42 @@
 $directory = shift @ARGV;
 
 opendir(DIR, "$directory") || die $!;
-print "open DIR \n";
+print "open DIR \n"; #печать текущих состояний в консоль
 
-while (defined($file = readdir(DIR))) {
-   $F++;
+while (defined($file = readdir(DIR))) { #открываем директорию
+   $F++; #считаем количество файлов
    print "file $file \n";
-   if ($file eq "." || $file eq "..") {next;}
-   open (IN, "<$directory/$file") or die "$!";
+   if ($file eq "." || $file eq "..") {next;} #пропускаем скрытые файлы
+   open (IN, "<$directory/$file") or die "$!";#Открываем файлы по одному
    print "*** \n";
-   while (<IN>) {
-         chomp;
-         @variants = split;
-         $word = $variants[0];
-         $add{$word} = 1; 
+   while (<IN>) { #работаем с текущим файлом
+         chomp; #убираем \n в конце строки
+         @variants = split; 
+         $word = $variants[0]; #работаем со словоформами
+         $add{$word} = 1; #записываем в массив add слова, которые содержатся в файле, со значением в hash массиве равным 1 
    }
    close IN;
-   foreach $word (keys(%add)) {
+   foreach $word (keys(%add)) { #цикл по ключам массива add
 
-         $file{$word} = $file{$word} + $add{$word};
+         $file{$word} = $file{$word} + $add{$word}; #записываем в массив file слово и значение массива add (слово есть в документе => значение = 1),т.е. получим количество файлов, содержащих текущее слово. 
 
    }
-   %add = {};
+   %add = {}; #обнуляем массив add
 }
-close DIR;
+close DIR; #закрываем директорию
 
 print "count idf \n";
 
-foreach $word (keys(%file)) {
+foreach $word (keys(%file)) { #цикл по ключам массива file
 
    
-   if ($file{$word} == 0) {next;}
+   if ($file{$word} == 0) {next;} #пропускаем слова, которые не встретились в данном файле
 
-   $idf{$word} = log($F/($file{$word}));  
+   $idf{$word} = log($F/($file{$word}));  #считаем idf
 }
-%file = {};
+%file = {}; # обнуляем массив file
 
+#второй проход
 
 opendir(DIR, "$directory") || die $!;
 print "open $directory again \n";
@@ -50,33 +51,35 @@ while (defined($file = readdir(DIR))) {
       chomp;    
       @variants = split;
       $word = $variants[0] ;
-      $count{$word}++;
-      $N++;
+      $count{$word}++; #подсчитываем абс. частоту слов в документе
+      $N++; #считаем общее число строк в документе
    }
    close IN;
    
-   $res = $file . "_tfidf";
-   open (OUT, ">$res") || die $!;
-   print "open OUT" . $res . "\n";
+   $res = $file . "_tfidf"; #присваиваем имя выходному файлу
+   open (OUT, ">$res") || die $!; #запись в выходной файл
+   print "open OUT" . $res . "\n"; #печать текущего состояния в консоль
    
    print "count tf idf \n";
    foreach $word (keys(%count)) {
-        $tf{$word} = $count{$word} / $N;
+        $tf{$word} = $count{$word} / $N; #считаем tf
    }
-   $N = 0;
+	#обнуление переменных для количества строк и частот слов
+   $N = 0; 
    %count = {};
     
    foreach $word ( keys(%tf)) {
-        $tfidf{$word} = $tf{$word} * $idf{$word}; 
+        $tfidf{$word} = $tf{$word} * $idf{$word}; #подсчёт tfidf
    }
-   %tf = {}; 
 
    print "print tf idf \n";
 
+        print OUT "слово (косегмент)" . "\t\t" . "tfidf" . "\t\t" . "tf" . "\t" . "idf" . "\n"; #верхняя строка выходного файла
    foreach $word (sort { $tfidf{$b} <=> $tfidf{$a} || $a cmp $b} keys %tfidf ) {
-       print OUT $word . "\t" . $tfidf{$word} . "\n";   
-   }
-   %tfidf = {};
+	print OUT $word . "\t" . $tfidf{$word} . "\t" . $tf{$word} . "\t" . $idf{$word} . "\n";   
+   }#сортировка по значением метрики tfidf и печать в выходной файл
+   %tf = {}; #обнуление массива tf
+   %tfidf = {}; #обнуление массива tfidf
    close OUT;
   
 }
