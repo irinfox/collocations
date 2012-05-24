@@ -1,5 +1,8 @@
+use utf8;
+use Encode;
 
-$directory = shift @ARGV;
+$directory = shift @ARGV[0] || die "$! \n usage: perl programName dirName w(ord)|l(emma)";
+$param = @ARGV[1] || die "$! \n usage: perl programName dirName w(ord)|l(emma)";
 
 opendir(DIR, "$directory") || die $!;
 print "open DIR \n"; #печать текущих состояний в консоль
@@ -13,8 +16,12 @@ while (defined($file = readdir(DIR))) { #открываем директорию
    while (<IN>) { #работаем с текущим файлом
          chomp; #убираем \n в конце строки
          @variants = split; 
-         $word = $variants[0]; #работаем со словоформами
-         $add{$word} = 1; #записываем в массив add слова, которые содержатся в файле, со значением в hash массиве равным 1 
+	if ($param eq "w") {	
+         	$word = $variants[0]; #работаем со словоформами
+        }else {	
+         	$word = $variants[1]; #работаем с леммами
+	}
+	 $add{$word} = 1; #записываем в массив add слова, которые содержатся в файле, со значением в hash массиве равным 1 
    }
    close IN;
    foreach $word (keys(%add)) { #цикл по ключам массива add
@@ -50,13 +57,17 @@ while (defined($file = readdir(DIR))) {
    while (<IN>) {
       chomp;    
       @variants = split;
-      $word = $variants[0] ;
-      $count{$word}++; #подсчитываем абс. частоту слов в документе
+	if ($param eq "w") {	
+         	$word = $variants[0]; #работаем со словоформами
+        }else {	
+         	$word = $variants[1]; #работаем с леммами
+      }
+	$count{$word}++; #подсчитываем абс. частоту слов в документе
       $N++; #считаем общее число строк в документе
    }
    close IN;
    
-   $res = $file . "_tfidf"; #присваиваем имя выходному файлу
+   $res = $file . "_tfidf"."_".$param; #присваиваем имя выходному файлу
    open (OUT, ">$res") || die $!; #запись в выходной файл
    print "open OUT" . $res . "\n"; #печать текущего состояния в консоль
    
