@@ -1,8 +1,10 @@
 use utf8;
 use Encode;
 
-$directory = shift @ARGV[0] || die "$! \n usage: perl programName dirName w(ord)|l(emma)";
-$param = @ARGV[1] || die "$! \n usage: perl programName dirName w(ord)|l(emma)";
+my $directory = @ARGV[0] || die "$! \n usage: perl programName dirName w(ord)|l(emma)";
+my $param = @ARGV[1] || die "$! \n usage: perl programName dirName w(ord)|l(emma)";
+
+my $punct = '(\.|\;|\:|\"|\'|\!|\?|\(|\)|\,|\-|\\|\/|\„|\Ѓ|\»|\«|\—|\~|\[|\]|\{|\}|\||\*|\+)';
 
 opendir(DIR, "$directory") || die $!;
 print "open DIR \n"; #печать текущих состояний в консоль
@@ -21,7 +23,9 @@ while (defined($file = readdir(DIR))) { #открываем директорию
         }else {	
          	$word = $variants[1]; #работаем с леммами
 	}
-	 $add{$word} = 1; #записываем в массив add слова, которые содержатся в файле, со значением в hash массиве равным 1 
+	unless ($word =~ $punct){#если не содержит знаки препинания, добавляется
+		 $add{$word} = 1; #записываем в массив add слова, которые содержатся в файле, со значением в hash массиве равным 1 
+  	}
    }
    close IN;
    foreach $word (keys(%add)) { #цикл по ключам массива add
@@ -62,14 +66,16 @@ while (defined($file = readdir(DIR))) {
         }else {	
          	$word = $variants[1]; #работаем с леммами
       }
-	$count{$word}++; #подсчитываем абс. частоту слов в документе
-      $N++; #считаем общее число строк в документе
-   }
+	unless ($word =~ $punct){#если не содержит знаки препинания, добавляется
+		$count{$word}++; #подсчитываем абс. частоту слов в документе
+      		$N++; #считаем общее число строк в документе
+   	}
+     }
    close IN;
    
    $res = $file . "_tfidf"."_".$param; #присваиваем имя выходному файлу
    open (OUT, ">$res") || die $!; #запись в выходной файл
-   print "open OUT" . $res . "\n"; #печать текущего состояния в консоль
+   print "open OUT " . $res . "\n"; #печать текущего состояния в консоль
    
    print "count tf idf \n";
    foreach $word (keys(%count)) {
@@ -85,7 +91,7 @@ while (defined($file = readdir(DIR))) {
 
    print "print tf idf \n";
 
-        print OUT "слово (косегмент)" . "\t\t" . "tfidf" . "\t\t" . "tf" . "\t" . "idf" . "\n"; #верхняя строка выходного файла
+   print OUT "слово (косегмент)" . "\t\t" . "tfidf" . "\t\t" . "tf" . "\t" . "idf" . "\n"; #верхняя строка выходного файла
    foreach $word (sort { $tfidf{$b} <=> $tfidf{$a} || $a cmp $b} keys %tfidf ) {
 	print OUT $word . "\t" . $tfidf{$word} . "\t" . $tf{$word} . "\t" . $idf{$word} . "\n";   
    }#сортировка по значением метрики tfidf и печать в выходной файл
