@@ -1,7 +1,7 @@
 <html>
 <head>
  <title>Collocations interface</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=windows-1251"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 	<meta name="Author" content="Krylova Irina"> 
 	<meta name="keywords" content="collocations,MI,t-score,mutual information">
 	<meta name="description" content="Collocations">
@@ -31,7 +31,7 @@
 		
 		
 		function checkedRadio(radioGroup){
-  //возвращает значение выбранного элемента группы радиокнопок radioGroup  
+  //РІРѕР·РІСЂР°С‰Р°РµС‚ Р·РЅР°С‡РµРЅРёРµ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р° РіСЂСѓРїРїС‹ СЂР°РґРёРѕРєРЅРѕРїРѕРє radioGroup  
 			n = -1;
 			for (i=0; i<radioGroup.length; i++){
 				if (radioGroup[i].checked) {
@@ -69,44 +69,44 @@
 				}
 				else {document.getElementById('collec').style.display = 'none'; }
 				
-				s += "На коллекции "+ collection.options[collection.selectedIndex].value +" будет запущена метрика \"" + checkedRadio(metric) + "\" с параметрами: \n "; 
-				s += checkedRadio(freqs)+" частоты; ";
-				if (ipm.checked) s += "посчитать " + ipm.value + "; ";
-				s += "по " + checkedRadio(param1) + ". "; //word, lemma
+				s += "РќР° РєРѕР»Р»РµРєС†РёРё "+ collection.options[collection.selectedIndex].value +" Р±СѓРґРµС‚ Р·Р°РїСѓС‰РµРЅР° РјРµС‚СЂРёРєР° \"" + checkedRadio(metric) + "\" СЃ РїР°СЂР°РјРµС‚СЂР°РјРё: \n "; 
+				s += checkedRadio(freqs)+" С‡Р°СЃС‚РѕС‚С‹; ";
+				if (ipm.checked) s += "РїРѕСЃС‡РёС‚Р°С‚СЊ " + ipm.value + "; ";
+				s += "РїРѕ " + checkedRadio(param1) + ". "; //word, lemma
 				
-				if (checkedRadio(metric) == "MI" || checkedRadio(metric) == "Частотный словарь"){
+				if (checkedRadio(metric) == "MI" || checkedRadio(metric) == "Р§Р°СЃС‚РѕС‚РЅС‹Р№ СЃР»РѕРІР°СЂСЊ"){
 					if (checkedBoxes(grams) == "" && gram.value == ""){
 						document.getElementById('gram').style.display = 'inline';
 						return ;
 					}
 					else {document.getElementById('gram').style.display = 'none'; 
 					
-					s += "Для ";
+					s += "Р”Р»СЏ ";
 					if (checkedBoxes(grams) != "") {s += checkedBoxes(grams);} //ngramms
-					if (checkedBoxes(grams) != "" && gram.value != ""){s += " и ";}
-					if (gram.value != ""){s += gram.value +"грамм";}
+					if (checkedBoxes(grams) != "" && gram.value != ""){s += " Рё ";}
+					if (gram.value != ""){s += gram.value +"РіСЂР°РјРј";}
 					s += ". ";
 					}
 				}
 				
-				//если введено
+				//РµСЃР»Рё РІРІРµРґРµРЅРѕ
 				if(top.value != "") {
-					s += "Записать " + top.value + " топ-слов. ";
+					s += "Р—Р°РїРёСЃР°С‚СЊ " + top.value + " С‚РѕРї-СЃР»РѕРІ. ";
 				}
 				
 				
-				//порог отсечения
+				//РїРѕСЂРѕРі РѕС‚СЃРµС‡РµРЅРёСЏ
 				if(b.value != 2) {
-					s += "Использовать порог отсечения по частоте = " + b.value + ".";
+					s += "РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РїРѕСЂРѕРі РѕС‚СЃРµС‡РµРЅРёСЏ РїРѕ С‡Р°СЃС‚РѕС‚Рµ = " + b.value + ".";
 				}
 				
-				//если есть, то такие, иначе не введены
+				//РµСЃР»Рё РµСЃС‚СЊ, С‚Рѕ С‚Р°РєРёРµ, РёРЅР°С‡Рµ РЅРµ РІРІРµРґРµРЅС‹
 				if (checkedBoxes(dop) != "") {
-					s += "\nДополнительные параметры: \n" + checkedBoxes(dop) + ".";
+					s += "\nР”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹: \n" + checkedBoxes(dop) + ".";
 				}
-				else {s += "\nДополнительные параметры: не выбраны."}
+				else {s += "\nР”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹: РЅРµ РІС‹Р±СЂР°РЅС‹."}
 				if(resFileName.value != "") {
-					s += "Результирующий файл: " + resFileName.value + ".";
+					s += "Р РµР·СѓР»СЊС‚РёСЂСѓСЋС‰РёР№ С„Р°Р№Р»: " + resFileName.value + ".";
 				}
 				else{document.getElementById('fileName').style.display = 'inline';}	
 				journal.style.display = 'block';
@@ -122,57 +122,57 @@
 <body>
 	<h1>Collocations</h1>
 	<form name="f" method = "get">
-	<div id="metrics" > <!--div для метрик -->
-		<p>Выберите метрику: <span class="required" id="metr">Вы не выбрали метрику!</span></p>
-		<label>Для извлечения единиц анализа:</label><br><br>
-		<label><input type="radio" name="metric" value="Частотный словарь" onclick="show('params'), hide('bound'), show('freq')">Частотный словарь  </label>
+	<div id="metrics" > <!--div РґР»СЏ РјРµС‚СЂРёРє -->
+		<p>Р’С‹Р±РµСЂРёС‚Рµ РјРµС‚СЂРёРєСѓ: <span class="required" id="metr">Р’С‹ РЅРµ РІС‹Р±СЂР°Р»Рё РјРµС‚СЂРёРєСѓ!</span></p>
+		<label>Р”Р»СЏ РёР·РІР»РµС‡РµРЅРёСЏ РµРґРёРЅРёС† Р°РЅР°Р»РёР·Р°:</label><br><br>
+		<label><input type="radio" name="metric" value="Р§Р°СЃС‚РѕС‚РЅС‹Р№ СЃР»РѕРІР°СЂСЊ" onclick="show('params'), hide('bound'), show('freq')">Р§Р°СЃС‚РѕС‚РЅС‹Р№ СЃР»РѕРІР°СЂСЊ  </label>
 		<label><input type="radio" name="metric" value="MI" onclick="show('params'), show('bound'), hide('freq')">MI  </label>
 		<label><input type="radio" name="metric" value="T-score" onclick="hide('params'),hide('bound'), hide('freq')">T-score  </label>
 		<label><input type="radio" name="metric" value="Dice" onclick="hide('params'),hide('bound'), hide('freq')">Dice  </label>
 		<label><input type="radio" name="metric" value="LL" onclick="hide('params'),hide('bound'), hide('freq')">LogLikelihood  </label><br><br><br>
-		<label>Для взвешивания единиц анализа:</label><br><br>
+		<label>Р”Р»СЏ РІР·РІРµС€РёРІР°РЅРёСЏ РµРґРёРЅРёС† Р°РЅР°Р»РёР·Р°:</label><br><br>
 		<label><input type="radio" name="metric" value="Tf-idf" onclick="hide('params'), hide('bound'), hide('freq')">Tf-idf  </label>
 		<label><input type="radio" name="metric" value="Wierdness" onclick="hide('params'), hide('bound'), hide('freq')">Wierdness  </label>
-		<label><input type="radio" name="metric" value="локальная/глобальная частота" onclick="hide('params'), hide('bound'), hide('freq')">локальная/глобальная частота</label><br><br><br>
+		<label><input type="radio" name="metric" value="Р»РѕРєР°Р»СЊРЅР°СЏ/РіР»РѕР±Р°Р»СЊРЅР°СЏ С‡Р°СЃС‚РѕС‚Р°" onclick="hide('params'), hide('bound'), hide('freq')">Р»РѕРєР°Р»СЊРЅР°СЏ/РіР»РѕР±Р°Р»СЊРЅР°СЏ С‡Р°СЃС‚РѕС‚Р°</label><br><br><br>
 	</div>
 	<div id="freq">
-	<p>Частоты:</p>
-	<label><input type="radio" name="freqs" value="абсолютные" checked>абсолютные</label>
-	<label><input type="radio" name="freqs" value="относительные">относительные</label>
+	<p>Р§Р°СЃС‚РѕС‚С‹:</p>
+	<label><input type="radio" name="freqs" value="Р°Р±СЃРѕР»СЋС‚РЅС‹Рµ" checked>Р°Р±СЃРѕР»СЋС‚РЅС‹Рµ</label>
+	<label><input type="radio" name="freqs" value="РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Рµ">РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹Рµ</label>
 	<label><input type="checkbox" name="ipm" value="ipm">ipm</label><br><br>	
 	</div>
-	<p>Считать метрику по:</p>
-	<label><input type="radio" name="param1" value="леммам" checked>леммам</label>
-	<label><input type="radio" name="param1" value="словоформам">словоформам</label><br><br>
+	<p>РЎС‡РёС‚Р°С‚СЊ РјРµС‚СЂРёРєСѓ РїРѕ:</p>
+	<label><input type="radio" name="param1" value="Р»РµРјРјР°Рј" checked>Р»РµРјРјР°Рј</label>
+	<label><input type="radio" name="param1" value="СЃР»РѕРІРѕС„РѕСЂРјР°Рј">СЃР»РѕРІРѕС„РѕСЂРјР°Рј</label><br><br>
 	<div id="params" >
-		<p>Считать метрику для: <span id="gram" class="required">Выберите для чего считать метрику.</span></p>
-		<label><input type="checkbox" name="grams" value="однословных" checked>однословных</label><br>
-		<label><input type="checkbox" name="grams" value="биграмм">биграмм</label><br>
-		<label><input type="checkbox" name="grams" value="триграмм">триграмм</label><br>
-		<label><input type="checkbox" name="grams" value="четырёхсловных">четырёхсловных</label><br>
-		<label><input type="checkbox" name="grams" value="пятисловных">пятисловных</label><br>	
-		<label>Другое: <input type="text" class="vvod" name="gram" value="" size="10"></label><br>	
+		<p>РЎС‡РёС‚Р°С‚СЊ РјРµС‚СЂРёРєСѓ РґР»СЏ: <span id="gram" class="required">Р’С‹Р±РµСЂРёС‚Рµ РґР»СЏ С‡РµРіРѕ СЃС‡РёС‚Р°С‚СЊ РјРµС‚СЂРёРєСѓ.</span></p>
+		<label><input type="checkbox" name="grams" value="РѕРґРЅРѕСЃР»РѕРІРЅС‹С…" checked>РѕРґРЅРѕСЃР»РѕРІРЅС‹С…</label><br>
+		<label><input type="checkbox" name="grams" value="Р±РёРіСЂР°РјРј">Р±РёРіСЂР°РјРј</label><br>
+		<label><input type="checkbox" name="grams" value="С‚СЂРёРіСЂР°РјРј">С‚СЂРёРіСЂР°РјРј</label><br>
+		<label><input type="checkbox" name="grams" value="С‡РµС‚С‹СЂС‘С…СЃР»РѕРІРЅС‹С…">С‡РµС‚С‹СЂС‘С…СЃР»РѕРІРЅС‹С…</label><br>
+		<label><input type="checkbox" name="grams" value="РїСЏС‚РёСЃР»РѕРІРЅС‹С…">РїСЏС‚РёСЃР»РѕРІРЅС‹С…</label><br>	
+		<label>Р”СЂСѓРіРѕРµ: <input type="text" class="vvod" name="gram" value="" size="10"></label><br>	
 	</div>
-	<p>Дополнительные параметры:</p>
-	<label><input type="checkbox" name="dop" value="Исключить пунктуацию">Исключить пунктуацию</label><br>
-	<label><input type="checkbox" name="dop" value="Перевести в нижний регистр">Перевести в нижний регистр</label><br>
-	<label><input type="checkbox" name="dop" value="Исключить цифры">Исключить цифры</label><br>
-	<label><input type="checkbox" name="dop" value="Исключить латиницу">Исключить латиницу</label><br><br>
-	<label>Записать только топ <input type="text" class="vvod" name="top" value="1000"> слов</label><br><br>
-	<!--выводить только для MI-->
+	<p>Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:</p>
+	<label><input type="checkbox" name="dop" value="РСЃРєР»СЋС‡РёС‚СЊ РїСѓРЅРєС‚СѓР°С†РёСЋ">РСЃРєР»СЋС‡РёС‚СЊ РїСѓРЅРєС‚СѓР°С†РёСЋ</label><br>
+	<label><input type="checkbox" name="dop" value="РџРµСЂРµРІРµСЃС‚Рё РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ">РџРµСЂРµРІРµСЃС‚Рё РІ РЅРёР¶РЅРёР№ СЂРµРіРёСЃС‚СЂ</label><br>
+	<label><input type="checkbox" name="dop" value="РСЃРєР»СЋС‡РёС‚СЊ С†РёС„СЂС‹">РСЃРєР»СЋС‡РёС‚СЊ С†РёС„СЂС‹</label><br>
+	<label><input type="checkbox" name="dop" value="РСЃРєР»СЋС‡РёС‚СЊ Р»Р°С‚РёРЅРёС†Сѓ">РСЃРєР»СЋС‡РёС‚СЊ Р»Р°С‚РёРЅРёС†Сѓ</label><br><br>
+	<label>Р—Р°РїРёСЃР°С‚СЊ С‚РѕР»СЊРєРѕ С‚РѕРї <input type="text" class="vvod" name="top" value="1000"> СЃР»РѕРІ</label><br><br>
+	<!--РІС‹РІРѕРґРёС‚СЊ С‚РѕР»СЊРєРѕ РґР»СЏ MI-->
 	<div id="bound">
-		<label style="font-weight:bold;">Порог отсечения частот: <input type="text" name="b" class="vvod" value="2"></label><br><br>		
+		<label style="font-weight:bold;">РџРѕСЂРѕРі РѕС‚СЃРµС‡РµРЅРёСЏ С‡Р°СЃС‚РѕС‚: <input type="text" name="b" class="vvod" value="2"></label><br><br>		
 	</div>
 	<div id="collections">
 		<select name="collection" size="1" class="vvod">
-		<option value="q">выберите коллекцию</option>
-		<option value="Лента">Лента</option>
-		<option value="Корпусная">Корпусная</option>
-		<option value="Диалог">Диалог</option>
-    </select> <span id="collec" class="required">Выберите коллекцию</span><br><br>	
+		<option value="q">РІС‹Р±РµСЂРёС‚Рµ РєРѕР»Р»РµРєС†РёСЋ</option>
+		<option value="Р›РµРЅС‚Р°">Р›РµРЅС‚Р°</option>
+		<option value="РљРѕСЂРїСѓСЃРЅР°СЏ">РљРѕСЂРїСѓСЃРЅР°СЏ</option>
+		<option value="Р”РёР°Р»РѕРі">Р”РёР°Р»РѕРі</option>
+    </select> <span id="collec" class="required">Р’С‹Р±РµСЂРёС‚Рµ РєРѕР»Р»РµРєС†РёСЋ</span><br><br>	
 	</div>
-	<label>Введите имя результирующего файла: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">Имя файлу будет присвоено автоматически</span><br><br>
-	<input type="button" name="start" value="Обработать" onClick="process()"><!--по клику должен показываться нижний див и запускаться обработка коллекции--><br><br>
+	<label>Р’РІРµРґРёС‚Рµ РёРјСЏ СЂРµР·СѓР»СЊС‚РёСЂСѓСЋС‰РµРіРѕ С„Р°Р№Р»Р°: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">РРјСЏ С„Р°Р№Р»Сѓ Р±СѓРґРµС‚ РїСЂРёСЃРІРѕРµРЅРѕ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё</span><br><br>
+	<input type="button" name="start" value="РћР±СЂР°Р±РѕС‚Р°С‚СЊ" onClick="process()"><!--РїРѕ РєР»РёРєСѓ РґРѕР»Р¶РµРЅ РїРѕРєР°Р·С‹РІР°С‚СЊСЃСЏ РЅРёР¶РЅРёР№ РґРёРІ Рё Р·Р°РїСѓСЃРєР°С‚СЊСЃСЏ РѕР±СЂР°Р±РѕС‚РєР° РєРѕР»Р»РµРєС†РёРё--><br><br>
 	
 	
 	
@@ -181,8 +181,8 @@
        </textarea></p>
 	</form>	
 	<div id="bottom">
-		Все <a href="http://code.google.com/p/collocations/source/browse/#svn%2Ftrunk" title="Программы, SVN">программы</a> и <a href="http://code.google.com/p/collocations/wiki/Documentation" title="Wiki документация">документация к ним</a> находятся в открытом доступе.
-		<p>&copy;Крылова Ирина</p>
+		Р’СЃРµ <a href="http://code.google.com/p/collocations/source/browse/#svn%2Ftrunk" title="РџСЂРѕРіСЂР°РјРјС‹, SVN">РїСЂРѕРіСЂР°РјРјС‹</a> Рё <a href="http://code.google.com/p/collocations/wiki/Documentation" title="Wiki РґРѕРєСѓРјРµРЅС‚Р°С†РёСЏ">РґРѕРєСѓРјРµРЅС‚Р°С†РёСЏ Рє РЅРёРј</a> РЅР°С…РѕРґСЏС‚СЃСЏ РІ РѕС‚РєСЂС‹С‚РѕРј РґРѕСЃС‚СѓРїРµ.
+		<p>&copy;РљСЂС‹Р»РѕРІР° РСЂРёРЅР°</p>
 	</div>
 </body>
 </html>
