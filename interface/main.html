@@ -58,7 +58,7 @@
 		function process(){
 			var s = '';
 			with(document.f){
-				if (checkedRadio(metric) == null){
+				if (checkedRadio(metricR) == null || checkedRadio(metricW) == null ){
 					document.getElementById('metr').style.display = 'inline';
 					return ;
 				}
@@ -121,43 +121,43 @@
 
 <body>
 	<h1>Collocations</h1>
-	<form name="f" method = "get">
+	<form name = "f" action = "index.php" method = "get">
 	<div id="metrics" > <!--div для метрик -->
 		<p>Выберите метрику: <span class="required" id="metr">Вы не выбрали метрику!</span></p>
 		<label>Для извлечения единиц анализа:</label><br><br>
-		<label><input type="radio" name="metric" value="Частотный словарь" onclick="show('params'), hide('bound'), show('freq')">Частотный словарь  </label>
-		<label><input type="radio" name="metric" value="MI" onclick="show('params'), show('bound'), hide('freq')">MI  </label>
-		<label><input type="radio" name="metric" value="T-score" onclick="hide('params'),hide('bound'), hide('freq')">T-score  </label>
-		<label><input type="radio" name="metric" value="Dice" onclick="hide('params'),hide('bound'), hide('freq')">Dice  </label>
-		<label><input type="radio" name="metric" value="LL" onclick="hide('params'),hide('bound'), hide('freq')">LogLikelihood  </label><br><br><br>
+		<label><input type="radio" name="metricR" value="freqDict" onclick="show('params'), hide('bound'), show('freq')">Частотный словарь  </label>
+		<label><input type="radio" name="metricR" value="MI" onclick="show('params'), show('bound'), hide('freq')">MI  </label>
+		<label><input type="radio" name="metricR" value="Tscore" onclick="hide('params'),hide('bound'), hide('freq')">T-score  </label>
+		<label><input type="radio" name="metricR" value="Dice" onclick="hide('params'),hide('bound'), hide('freq')">Dice  </label>
+		<label><input type="radio" name="metricR" value="LL" onclick="hide('params'),hide('bound'), hide('freq')">LogLikelihood  </label><br><br><br>
 		<label>Для взвешивания единиц анализа:</label><br><br>
-		<label><input type="radio" name="metric" value="Tf-idf" onclick="hide('params'), hide('bound'), hide('freq')">Tf-idf  </label>
-		<label><input type="radio" name="metric" value="Wierdness" onclick="hide('params'), hide('bound'), hide('freq')">Wierdness  </label>
-		<label><input type="radio" name="metric" value="локальная/глобальная частота" onclick="hide('params'), hide('bound'), hide('freq')">локальная/глобальная частота</label><br><br><br>
+		<label><input type="radio" name="metricW" value="Tf-idf" onclick="hide('params'), hide('bound'), hide('freq')">Tf-idf  </label>
+		<label><input type="radio" name="metricW" value="Wierdness" onclick="hide('params'), hide('bound'), hide('freq')">Wierdness  </label>
+		<label><input type="radio" name="metricW" value="locglob" onclick="hide('params'), hide('bound'), hide('freq')">локальная/глобальная частота</label><br><br><br>
 	</div>
 	<div id="freq">
 	<p>Частоты:</p>
-	<label><input type="radio" name="freqs" value="абсолютные" checked>абсолютные</label>
-	<label><input type="radio" name="freqs" value="относительные">относительные</label>
+	<label><input type="radio" name="freqs" value="abs" checked>абсолютные</label>
+	<label><input type="radio" name="freqs" value="rel">относительные</label>
 	<label><input type="checkbox" name="ipm" value="ipm">ipm</label><br><br>	
 	</div>
 	<p>Считать метрику по:</p>
-	<label><input type="radio" name="param1" value="леммам" checked>леммам</label>
-	<label><input type="radio" name="param1" value="словоформам">словоформам</label><br><br>
+	<label><input type="radio" name="param1" value="lemm" checked>леммам</label>
+	<label><input type="radio" name="param1" value="word">словоформам</label><br><br>
 	<div id="params" >
 		<p>Считать метрику для: <span id="gram" class="required">Выберите для чего считать метрику.</span></p>
-		<label><input type="checkbox" name="grams" value="однословных" checked>однословных</label><br>
-		<label><input type="checkbox" name="grams" value="биграмм">биграмм</label><br>
-		<label><input type="checkbox" name="grams" value="триграмм">триграмм</label><br>
-		<label><input type="checkbox" name="grams" value="четырёхсловных">четырёхсловных</label><br>
-		<label><input type="checkbox" name="grams" value="пятисловных">пятисловных</label><br>	
+		<label><input type="checkbox" name="grams" value="onew" checked>однословных</label><br>
+		<label><input type="checkbox" name="grams" value="bi">биграмм</label><br>
+		<label><input type="checkbox" name="grams" value="tri">триграмм</label><br>
+		<label><input type="checkbox" name="grams" value="four">четырёхсловных</label><br>
+		<label><input type="checkbox" name="grams" value="five">пятисловных</label><br>	
 		<label>Другое: <input type="text" class="vvod" name="gram" value="" size="10"></label><br>	
 	</div>
 	<p>Дополнительные параметры:</p>
-	<label><input type="checkbox" name="dop" value="Исключить пунктуацию">Исключить пунктуацию</label><br>
-	<label><input type="checkbox" name="dop" value="Перевести в нижний регистр">Перевести в нижний регистр</label><br>
-	<label><input type="checkbox" name="dop" value="Исключить цифры">Исключить цифры</label><br>
-	<label><input type="checkbox" name="dop" value="Исключить латиницу">Исключить латиницу</label><br><br>
+	<label><input type="checkbox" name="dop" value="punct">Исключить пунктуацию</label><br>
+	<label><input type="checkbox" name="dop" value="lowcase">Перевести в нижний регистр</label><br>
+	<label><input type="checkbox" name="dop" value="digit">Исключить цифры</label><br>
+	<label><input type="checkbox" name="dop" value="cyr">Исключить латиницу</label><br><br>
 	<label>Записать только топ <input type="text" class="vvod" name="top" value="1000"> слов</label><br><br>
 	<!--выводить только для MI-->
 	<div id="bound">
@@ -166,13 +166,13 @@
 	<div id="collections">
 		<select name="collection" size="1" class="vvod">
 		<option value="q">выберите коллекцию</option>
-		<option value="Лента">Лента</option>
-		<option value="Корпусная">Корпусная</option>
-		<option value="Диалог">Диалог</option>
+		<option value="vz">Взгляд</option>
+		<option value="corp">Корпусная</option>
+		<option value="ng">Независимая газета</option>
     </select> <span id="collec" class="required">Выберите коллекцию</span><br><br>	
 	</div>
 	<label>Введите имя результирующего файла: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">Имя файлу будет присвоено автоматически</span><br><br>
-	<input type="button" name="start" value="Обработать" onClick="process()"><!--по клику должен показываться нижний див и запускаться обработка коллекции--><br><br>
+	<input type="submit" name="start" value="Обработать" onClick="process()"><!--по клику должен показываться нижний див и запускаться обработка коллекции--><br><br>
 	
 	
 	
