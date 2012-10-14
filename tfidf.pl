@@ -1,5 +1,4 @@
 use utf8;
-use Encode;
 
 my $directory = @ARGV[0] || die "$! \n usage: perl programName dirName w(ord)|l(emma)";
 my $param = @ARGV[1] || die "$! \n usage: perl programName dirName w(ord)|l(emma)";
