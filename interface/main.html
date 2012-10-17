@@ -54,7 +54,12 @@
 			}
 			return v;
 		}	
-		
+
+		function uncheck (radiogr){
+			for (i=0; i<radiogr.length; i++){
+				radiogr[i].disabled = "disabled";
+			}
+		}	
 		function process(){
 			var s = '';
 			with(document.f){
@@ -82,8 +87,8 @@
 					else {document.getElementById('gram').style.display = 'none'; 
 					
 					s += "Для ";
-					if (checkedBoxes(grams) != "") {s += checkedBoxes(grams);} //ngramms
-					if (checkedBoxes(grams) != "" && gram.value != ""){s += " и ";}
+					if (checkedRadio(grams) != "") {s += checkedRadio(grams);} //ngramms
+					if (checkedRadio(grams) != "" && gram.value != ""){s += " и ";}
 					if (gram.value != ""){s += gram.value +"грамм";}
 					s += ". ";
 					}
@@ -127,7 +132,7 @@
 		<label>Для извлечения единиц анализа:</label><br><br>
 		<label><input type="radio" name="metricR" value="freqDict" onclick="show('params'), hide('bound'), show('freq')">Частотный словарь  </label>
 		<label><input type="radio" name="metricR" value="MI" onclick="show('params'), show('bound'), hide('freq')">MI  </label>
-		<label><input type="radio" name="metricR" value="Tscore" onclick="hide('params'),hide('bound'), hide('freq')">T-score  </label>
+		<label><input type="radio" name="metricR" value="tscore" onclick="hide('params'),hide('bound'), hide('freq')">T-score  </label>
 		<label><input type="radio" name="metricR" value="Dice" onclick="hide('params'),hide('bound'), hide('freq')">Dice  </label>
 		<label><input type="radio" name="metricR" value="LL" onclick="hide('params'),hide('bound'), hide('freq')">LogLikelihood  </label><br><br><br>
 		<label>Для взвешивания единиц анализа:</label><br><br>
@@ -146,12 +151,12 @@
 	<label><input type="radio" name="param1" value="word">словоформам</label><br><br>
 	<div id="params" >
 		<p>Считать метрику для: <span id="gram" class="required">Выберите для чего считать метрику.</span></p>
-		<label><input type="checkbox" name="grams" value="onew" checked>однословных</label><br>
-		<label><input type="checkbox" name="grams" value="bi">биграмм</label><br>
-		<label><input type="checkbox" name="grams" value="tri">триграмм</label><br>
-		<label><input type="checkbox" name="grams" value="four">четырёхсловных</label><br>
-		<label><input type="checkbox" name="grams" value="five">пятисловных</label><br>	
-		<label>Другое: <input type="text" class="vvod" name="gram" value="" size="10"></label><br>	
+		<label><input type="radio" name="grams" value="1" checked>однословных</label><br>
+		<label><input type="radio" name="grams" value="2">биграмм</label><br>
+		<label><input type="radio" name="grams" value="3">триграмм</label><br>
+		<label><input type="radio" name="grams" value="4">четырёхсловных</label><br>
+		<label><input type="radio" name="grams" value="5">пятисловных</label><br>	
+		<label>Другое: <input type="text" class="vvod" name="gram" value="" size="10" onfocus="uncheck('grams')"></label><br>	
 	</div>
 	<p>Дополнительные параметры:</p>
 	<label><input type="checkbox" name="dop" value="punct">Исключить пунктуацию</label><br>
