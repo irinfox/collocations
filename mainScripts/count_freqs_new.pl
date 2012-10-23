@@ -3,15 +3,15 @@ use Encode;
 
 binmode(STDOUT, ":encoding(utf8)");
 
- $file_name = @ARGV[0] || die "$! \n usage: FILE_NAME w|l";
+my $file_name = @ARGV[0] || die "$! \n usage: FILE_NAME w|l bound";
 
- $param = @ARGV[1] || die "$! \n usage: FILE_NAME w(ord)|l(emma)";
+my  $param = @ARGV[1] || die "$! \n usage: FILE_NAME w(ord)|l(emma) bound";
 #переменные для первого (лемматизированный файл) и второго (словоформы, лексемы) параметров
 
 #($file_name, $param) = @ARGV || die "$! \n usage: FILE_NAME 0|1";
 
-$main_output = $file_name . "_" . $param;
-
+my $main_output = $file_name . "_" . $param;
+my $b = @ARGV[2] || die "$! \n usage: FILE_NAME w|l bound"; 
 
 print "read file $file_name \n";
 
@@ -19,7 +19,9 @@ open (IN, "<$file_name") || die $!;
 #создание частотных словарей для 1-5грамм
 binmode (IN, ":encoding(utf8)");
 
-$mln = 0;
+my $mln = 0;
+my ($N, $N_words);
+my @variants;
 
 while (<IN>) {
 
@@ -29,11 +31,7 @@ $N++;
 
 @variants = split;
 
-
-
 chomp;
-
-
 
 $x_4 = $x_3;
 $x_3 = $x_2;
@@ -136,9 +134,9 @@ close OUT;
 #такой же, как и выше, частотный словарь для биграмм
 print "2_MI  2_TS \n";
 
-%MI_colloc = MI( \%p2, \%p1, 3);
+%MI_colloc = MI( \%p2, \%p1, $b);
 print_Metric (\%p2, \%MI_colloc, "_MI_2_$main_output");
-%TS_colloc = TScore( \%p2, \%p1, 3);
+%TS_colloc = TScore( \%p2, \%p1, $b);
 print_Metric (\%p2, \%TS_colloc, "_TS_2_$main_output");
 #запуск программ MI и t-score. Для успешной работы программ, им нужно передать ссылку на hash с частотами словосочетаний и ссылку на hash с частотами лексем, а также границу отсечения по частоте (MI считается для наиболее частотных)
 %TS_colloc = {};
@@ -169,7 +167,7 @@ close OUT;
 
 print "3_MI \n";
 
-%MI_colloc = MI( \%p3, \%p1, 3);
+%MI_colloc = MI( \%p3, \%p1, $b);
 print_Metric (\%p3, \%MI_colloc, "_MI_3_$main_output");
 
 %MI_colloc = {};
@@ -198,7 +196,7 @@ close OUT;
 #частотный словарь для 4грамм
 print "4_MI \n";
 
-%MI_colloc = MI( \%p4, \%p1, 3);
+%MI_colloc = MI( \%p4, \%p1, $b);
 print_Metric (\%p4, \%MI_colloc, "_MI_4_$main_output");
 
 %MI_colloc = {};
@@ -225,7 +223,7 @@ close OUT;
 #частотный словарь для 5грамм
 print "5_MI \n";
 
-%MI_colloc = MI( \%p5, \%p1, 3);
+%MI_colloc = MI( \%p5, \%p1, $b);
 print_Metric (\%p5, \%MI_colloc, "_MI_5_$main_output");
 
 %MI_colloc = {};
