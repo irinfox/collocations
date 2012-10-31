@@ -60,9 +60,8 @@
 	}
 	else {
 		$filename .= "_w"; 
-		if ($_GET['metricR']== "freqDict"){
-			$launchDict .= " -w";
-		}
+		//здесь была проверка на то, что метрика - част. словарь
+		$launchDict .= " -w";
 	}
 
 	if ($_GET['dop'] == "lowcase"){
@@ -88,13 +87,15 @@
 		$launchDict .= " -n".$_GET['grams'];
 	}
 	
-	if ($_GET['metricR'] == "MI"){ 
+	if ($_GET['metricR'] == "MI" || $_GET['metricR'] == "tscore"){	 
+		if ($_GET['metricR'] == "tscore"){$filename .= "_";}
 		$filename .= "b".$_GET['b'];
-		//$dict1 .= "b".$_GET['b'];
+		$dict1 .= "b".$_GET['b'];
+		$tempStr = "а для MI и tscore проверим ещё и этот: $dict1 <br>";
 	}
 
 
-	echo "ищем файл: $filename,<br> а для MI и tscore проверим ещё и этот: $dict1 <br>";
+	echo "ищем файл: $filename<br>".$tempStr;
 	
 	//где ищем?
 	$path = "";
@@ -114,22 +115,23 @@
 	}
 	else {
 		if ($_GET[metricR]== "freqDict"){ 
-			echo "запускаю программу и радуюсь " .$launchDict;
+			echo "запускаю программу и радуюсь: " .$launchDict;
 		}
 		else {	
 			if (file_exists($path.$dict1)){
 				echo "<br>запускаю программу раз и как-то сохраняю результат".$launchDict;	
-				$res = "freqMonogo"; //это должен быть дескриптор файла, наверное
+				$res = "freqMnogo"; //это должен быть дескриптор файла, наверное
 				$launch .= " -f $res -h $dict1 ";//надо по dict1 прописать в перл. программе подсчёт частот
 				echo "<br>запускаю программу два  ".$launch;
 			}
 			else {
 				echo "<br> вот же не повезло<br>";
+				if ($_GET['metricR'] == "tscore"){ $launchDict .= " -n2";}
 				echo "<br>раз ".$launchDict;
 				$res2 = "freqMnogo";//для больше 1граммы
 				echo "<br>два ".$launchDict1;
 				$res1 = "freqOdin"; //для однословий
-				$launch .= " -f $res2 -h $res1 "; //
+				$launch .= " -f $res2 -h $res1 -b".$_GET['b'];
 				echo "<br>три ".$launch;
 			}	
 		}
