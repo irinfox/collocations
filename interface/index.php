@@ -6,6 +6,12 @@
 	$launchDict1 = "perl ";
 	$dict1 = ""; //файл для поиска однословных частот для MI, tscore
 
+    $coll2path = array(
+        'vz'   => 'news/vz',
+        'ng'   => 'news/ng',
+        'corp' => 'science/corp'
+    );
+
 	foreach ($_GET as $key => $value){
 		echo "$key = $value<br>";
 	}
@@ -38,18 +44,7 @@
 	}
 	
 	//где берём файлы?
-	$pathSrc = "";
-	switch ($_GET['collection']){
-		case "vz": 
-			$pathSrc = "../collections/texts/news/vz/";
-			break;
-		case "ng":
-			$pathSrc = "../collections/texts/news/ng/";
-			break;
-		case "corp":	
-			$pathSrc = "../collections/texts/science/corp/";
-			break;	
-	}
+    $pathSrc = "../collections/texts/" . $coll2path[$_GET['collection']] . '/';
 
 	//строка запуска perl progName -f fileName с указанием пути программы и файла
 	
@@ -98,23 +93,13 @@
 	echo "ищем файл: $filename<br>".$tempStr;
 	
 	//где ищем?
-	$path = "";
-	switch ($_GET['collection']){
-		case "vz": 
-			$path = "../collections/metric/news/vz/";
-			break;
-		case "ng":
-			$path = "../collections/metric/news/ng/";
-			break;
-		case "corp":	
-			$path = "../collections/metric/science/corp/";
-			break;	
-	}
+    $path = "../collections/metric/" . $coll2path[$_GET['collection']] . '/';
+
 	if (file_exists($path.$filename)){
 		echo "отдаю файл: $path.$filename";
 	}
 	else {
-		if ($_GET[metricR]== "freqDict"){ 
+		if ($_GET['metricR']== "freqDict"){ 
 			echo "запускаю программу и радуюсь: " .$launchDict;
 		}
 		else {	
