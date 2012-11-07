@@ -133,18 +133,19 @@
 
 			if (file_exists($path.$dict1) && file_exists($path.$dict2)){//существуют оба частотных списка	
 				
-				$launch .= " -f $dict2 -h $dict1 -b".$_GET['b'];
+				$launch .= " -f $path$dict2 -h $path$dict1 -b".$_GET['b'];
 				
 				echo "<br>три ".$launch;
 				mysql_query("insert into journal values(NULL,'".mysql_real_escape_string($launch)."','".mysql_real_escape_string($path.$filename)."', 0)");
 			}	
 						
 			if (file_exists($path.$dict1)&&  !file_exists($path.$dict2)){//no nGram freqdict
+				if ($_GET['metricR'] == "tscore"){ $launchDict .= " -n2";}
 				echo "<br>запускаю программу раз и как-то сохраняю результат".$launchDict;	
 				
                      		 mysql_query("insert into journal values(NULL,'".mysql_real_escape_string($launchDict)."','".mysql_real_escape_string($path.$dict2)."', 0)");
 				
-				$launch .= " -f $dict2 -h $dict1 ";//надо по dict1 прописать в перл. программе подсчёт частот
+				$launch .= " -f $path$dict2 -h $path$dict1 ";//надо по dict1 прописать в перл. программе подсчёт частот
 				echo "<br>запускаю программу два  ".$launch;
                         	
 				mysql_query("insert into journal values(NULL,'".mysql_real_escape_string($launch)."','".mysql_real_escape_string($path.$filename)."', 0)");
@@ -156,7 +157,7 @@
 				echo "<br>униграммный ".$launchDict1;
 				mysql_query("insert into journal values(NULL'".mysql_real_escape_string($launchDict1)."','".mysql_real_escape_string($path.$dict1)."', 0)");
 				
-				$launch .= " -f $dict2 -h $dict1 ";
+				$launch .= " -f $path$dict2 -h $path$dict1 ";
 				echo "<br>запускаю программу два  ".$launch;
                         	
 				mysql_query("insert into journal values(NULL,'".mysql_real_escape_string($launch)."','".mysql_real_escape_string($path.$filename)."', 0)");
@@ -176,7 +177,7 @@
 				
 		//		print "<br>код ошибки: ". mysql_error();
 
-				$launch .= " -f $dict2 -h $dict1 -b".$_GET['b'];
+				$launch .= " -f $path$dict2 -h $path$dict1 -b".$_GET['b'];
 				
 				echo "<br>три ".$launch;
 				mysql_query("insert into journal values(NULL,'".mysql_real_escape_string($launch)."','".mysql_real_escape_string($path.$filename)."', 0)");
@@ -187,43 +188,21 @@
 
 	}
 
-//не печатает таблицу!
-	
-	$result = mysql_query("select * from journal");
-	if ($result){
-		print_journal($result);
-	}
-	function print_journal($received){
-		$i = 0; $th ="<tr><td>номер"; $td='';
-		$table ="<table border = 1>";
-		while ($line = mysql_fetch_assoc($received)){
-			if ($i ==0){
-				foreach ($line as $k => $v){
-					$th = $th."<th>$k";
-				}
-			}
-			$i++;
-			$td=$td."<tr><td>$i";
-			foreach ($line as $k => $v){
-				$td = $td."<td>$v";
-			}
-		}
-		$table = $table.$th.$td."</table>";
-		return $table;
-	}
+//printing table
+print "<br><br><b>This is how journal looks like:</b><br><br>";
+   $sql="select * from journal";
+   $result = mysql_query($sql);
 
-/*../collections/texts/news/NG:
-ng_all.txt.af.lemma_utf8
-
-../collections/texts/news/VZ:
-vz.ru_sport.txt.utf8.lemma
-
-../collections/texts/science:
-corp
-dialog
-
-../collections/texts/science/corp:
-corp.txt.utf8.lemma
-*/
-
+   $table="<form method='get' action='index.php'><table border=1><tr><td>ID<td>launch_path<td>res_path<td>mode";
+   while ($line = mysql_fetch_assoc($result)){
+      $iD = $line['numb']." ";
+      $launch_path = $line['launch']." ";
+      $res_path = $line['path']." ";
+      $mode = $line['mode'];
+      $table.= "<tr><td>$iD<td>$launch_path<td>$res_path<td>$mode";
+   };
+   print $table;
 ?>
+
+<form method="get" action="index.php">
+</form>
