@@ -8,20 +8,35 @@ my %opts;
 getopts('f:h:n:b:', \%opts);
 
 #help
-if (!$opts{'f'} && !$opts{'h'} && !$opts{'n'}){
-	print "Usage:\n $0 -f FILE \t file with bigrams\n $0 -h FILE \t file with oneword grams \n -n numb \tamount of words in collection \n Additional parametr: \n -b numb \t frequence bound (don't print below this bound)\n";
+if (!$opts{'f'} && !$opts{'h'}){
+	print "Usage:\n $0 -f FILE \t file with Ngrams\n $0 -h FILE \t file with oneword grams \n Additional parametr: \n -b numb \t frequence bound (don't print below this bound)\n";
 	exit;
 }
 
 # f - теоретически из конвейера, h, n - из БД с нач. файлом и его частотниками; b - введено пользователем.
 
-my $N_words = $opts{'n'};
+#my $N_words = $opts{'n'};
 
 #запуск программ MI и t-score. Для успешной работы программ, им нужно передать ссылку на hash с частотами словосочетаний и ссылку на hash с частотами лексем, а также границу отсечения по частоте (MI считается для наиболее частотных)
 
 my %bi = readFile($opts{'f'});
 my %one = readFile($opts{'h'});
-my %MI_colloc = MI(\%bi, \%one, \$opts{'b'});
+
+my $sum = 0;
+   foreach my $value (values(%one)){
+   #print $value;
+   $sum += $value; 
+}
+my $N_words = $sum;
+#print $N_words;
+
+my $bu;
+if (!$opts{'b'}){$bu = 2;}
+else {$bu = $opts{'b'}}
+
+my %MI_colloc = MI(\%bi, \%one, $bu);
+
+binmode(STDOUT, ":encoding(utf-8)");
 print_Metric (\%bi, \%MI_colloc);
 
 #%MI_colloc = {};
@@ -46,32 +61,31 @@ sub MI {
   my @word;
   my $logN = log2($N_words);
  # $bound = $bound / $N;
-  print "count MI $colloc_freq, $word_freq, $bound \n";
+  #print "count MI $colloc_freq, $word_freq, $bound \n";
 
   foreach my $colloc (keys %$colloc_freq) {
 
    if ($$colloc_freq{$colloc} > $bound) { # Отсечение по частоте
  	@word = split (/\t/, $colloc);
-
+	#print "colloc: ".$colloc." colloc_freq: ".$$colloc_freq{$colloc}."\n";
    	# Считаем произведение частот для знаменателя
    	$denominator = 1;
  	foreach my $word (@word) {
 	  chomp $word;
+	#print "here: ".$word."\n";
 
-
-	  #if ($word =~ /[A-Z]|[a-z]/) {
-	   #$denominator = 0;
-	   #}else{
 	  $denominator = $denominator * $$word_freq{$word};
-         #}  
+	#print "denom: ".$denominator."\n";
+	#print "word_freq: ".$$word_freq{$word}."\n";
     }
 
 
  	# Собственно MI
  	   if ($denominator == 0) {next;}
            if ($$colloc_freq{$colloc} == 0 || $$colloc_freq{$colloc} <= 0) {next;}
- 		$MI{$colloc} = log2($$colloc_freq{$colloc}/$denominator) + $logN;
-
+ #	print $$colloc_freq($colloc)."\n";
+	$MI{$colloc} = log2($$colloc_freq{$colloc}/$denominator) + $logN;
+#	print "colloc: ".$colloc." MI: ".$MI{$colloc}."\n";
   }
  }
  return %MI;
@@ -92,14 +106,23 @@ sub MI {
 ############################################################
 
 sub readFile{
-	open my $file, $_[0] or die "Failed to open file: $!";
-    	binmode ($file, ":encoding(utf8)");
+#	open (FILE, $_[0]);
+    open my $file, $_[0] or die "cannot open file: $!";
+    binmode ($file, ":encoding(utf8)");
+	my $x;
+ #   	binmode (FILE, ":encoding(utf8)");
+ 	binmode(STDOUT, ":encoding(utf8)");
 	my %freqDict;
         while (<$file>) {
-	       my ($first, $last) = split (/\t/, $file); #нужно разбить строку по табам так, чтоб слова (nграммы) до таба стали ключами словаря, а слова после таба - значениями. 
+	#	print $_."\n";
+               if ($_ =~ m/colloc\t\t\t\t\t\tfreq/){next;}
+	       else {
+		chomp;
+		my ($first, $last) = split (/\t{2}/, $_); #нужно разбить строку по табам так, чтоб слова (nграммы) до таба стали ключами словаря, а слова после таба - значениями. 
 		$freqDict{$first} = $last;	
-       		 
-        }
+       	#	print $first."\t".$last;	 
+        	}
+	}
 	return %freqDict;
 	close $file;
 }

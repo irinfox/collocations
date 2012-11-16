@@ -8,7 +8,7 @@ my $punct = '(\=|\>|\<|\.|\;|\:|\"|\'|\!|\?|\(|\)|\,|\-|\\|\/|\„|\Ѓ|\»|\«|\
 my @variants; #arrays for work with input file(s)
 my @vars;
 #my $x=-1;
-my %dict; #frequensy dictionary
+my %dict; #frequency dictionary
 
 #options
 my %opts;
@@ -51,8 +51,8 @@ my	$N_words = $#vars + 1;
 if ($opts{'n'}){
 	count_freqs($opts{'n'});
 }
-else {
-	count_freqs($opts{1});
+if (!$opts{'n'}) {
+	count_freqs(1);
 }
 
 print_freqs();
@@ -61,7 +61,7 @@ print_freqs();
 
 #reading file
 sub readFile{
-	open $file, $_[0] or die "Failed to open file: $!";
+    open $file, $_[0] or die "cannot open file: $!";
     binmode ($file, ":encoding(utf8)");
 	my $x;
         while (<$file>) {
@@ -75,23 +75,22 @@ sub readFile{
 				$x = $variants[1];
 	        }
 			
-			if ($opts{'l'}){
+		if ($opts{'l'}){
 	           $x = lc($x);         
-            }
-			
-			if ($opts{'c'}){
-				if ($x =~ /[a-zA-Z]/){next;}
-			}
+            	}
+		if ($opts{'c'}){
+			if ($x =~ /[a-zA-Z]/){next;}
+		}
             
-            if ($opts{'p'}){
-				if ($x =~ /$punct/){next;}
-			}
+                if ($opts{'p'}){
+			if ($x =~ /$punct/){next;}
+		}
 			
-            if ($opts{'d'}){
-				if ($x =~ /[0-9]/){next;}
-			}
+                if ($opts{'d'}){
+			if ($x =~ /[0-9]/){next;}
+		}
         
-		  	 push (@vars, $x); #нужно иначе обновлять значение
+	  	 push (@vars, $x); #нужно иначе обновлять значение
 					
 			#$N_words = 
         }
@@ -107,17 +106,19 @@ sub count_freqs{
 		$t="";
 	   	for $j($i-($_[0]-1)..$i){
 	#		print "for j: $vars[$j]\n";
-#			if($vars[$j] eq ''){
-#				next L;			
-#			}
-#			else {
+			if($vars[$j] eq ''){
+				next L;			
+			}
+			else {
 				push(@t,$vars[$j]);
-#			}
+			}
 	       	}
 		for $j(0..$#t){
-			$t=$t." ".$t[$j];
+			if ($j < 1){next;}
+			if ($j == 1){$t=$t[$j];}
+			if ($j > 1){$t=$t."\t".$t[$j];}		
 		}
-		#$t = join('', @t);
+		#$t = join('    ', @t);
 		$dict{$t}++;
 	}
 	#print "$t --> $dict{$t}";
@@ -139,7 +140,7 @@ sub print_freqs{
 	if ($opts{'i'}){ 
 		$print_str = $print_str."\t\t ipm"; 
 	}
-	print "colloc \t\t\t\t\t\t freq".$print_str."\n\n"; 
+	print "colloc\t\t\t\t\t\tfreq".$print_str."\n\n"; 
 	
 	my $i = 0;
 	for $k(sort{$dict{$b}<=>$dict{$a}}keys(%dict)){
@@ -157,7 +158,7 @@ sub print_freqs{
 		if ($opts{'b'}){
 			if ($i > $opts{'b'}){last;}
 		}	
-		print  $k."\t\t".$dict{$k}.$str."\n";
+		print $k."\t\t".$dict{$k}.$str."\n";
 	}	
 }
 

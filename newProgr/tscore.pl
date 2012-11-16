@@ -9,15 +9,28 @@ getopts('f:h:n:b:', \%opts);
 
 #help
 if (!$opts{'f'} && !$opts{'h'} && !$opts{'n'}){
-	print "Usage:\n $0 -f FILE \t file with bigrams\n $0 -h FILE \t file with oneword grams \n -n numb \tamount of words in collection \n Additional parametr: \n -b numb \t frequence bound (don't print below this bound)\n";
+	print "Usage:\n $0 -f FILE \t file with bigrams\n $0 -h FILE \t file with oneword grams \n -b numb \t frequence bound (don't print below this bound)\n";
 	exit;
 }
 
-my $N_words = $opts{'n'};
+#my $N_words = $opts{'n'};
 
 my %bi = readFile($opts{'f'});
 my %one = readFile($opts{'h'});
-my %TS_colloc = TScore( \%bi, \%one, \$opts{'b'});
+#my $N_words = count_words(\%one);
+
+my $sum = 0;
+   foreach my $value (values(%one)){
+   #print $value;
+   $sum += $value; 
+}
+my $N_words = $sum;
+
+my $bu;
+if (!$opts{'b'}){$bu = 2;}
+else {$bu = $opts{'b'}}
+
+my %TS_colloc = TScore(\%bi, \%one,$bu);
 print_Metric (\%bi, \%TS_colloc);
 
 #запуск подрограмм подсчёта и печати t-score. Для успешной работы программ, им нужно передать ссылку на hash с частотами словосочетаний и ссылку на hash с частотами лексем, а также границу отсечения по частоте (MI считается для наиболее частотных)
@@ -35,8 +48,6 @@ sub TScore {
   my ($pr, $pr_N, $sq);	
  # $bound = $bound / $N;
 
- print "count TS $colloc_freq, $word_freq, $bound \n";
-
   foreach my $colloc (keys %$colloc_freq) {
    if ($$colloc_freq{$colloc} > $bound) { # Отсечение по частоте
  	@word = split (/\t/, $colloc);
@@ -46,15 +57,8 @@ sub TScore {
    foreach my $word (@word) {  
     $pr = $pr * $$word_freq{$word};  
    }
-   #print "COLLOC: $colloc pr: $pr \n";
-
    $pr_N = $pr / $N_words;
-
-   #print "COLLOC: $colloc pr: $pr N: $N pr_N: $pr_N \n";
-
    $sq = sqrt($$colloc_freq{$colloc});
-
-   # print "COLLC: $colloc FREQ: $$colloc_freq{$colloc} SQ: $sq \n";
 
    $TS{$colloc} = $sq - ($pr_N / $sq);
 
@@ -71,7 +75,7 @@ sub print_Metric {
 
  my ($colloc_freq, $Metric) = @_;
 
-	print "print TS $colloc_freq, $Metric \n";
+	#print "print TS $colloc_freq, $Metric \n";
 
    #	open (LIST, ">$output");
 
@@ -91,10 +95,13 @@ sub readFile{
     	binmode ($file, ":encoding(utf8)");
 	my %freqDict;
         while (<$file>) {
-	       my ($first, $last) = split (/\t/, $file); #нужно разбить строку по табам так, чтоб слова (nграммы) до таба стали ключами словаря, а слова после таба - значениями. 
-		$freqDict{$first} = $last;	
-       		 
-        }
+               if ($_ =~ m/colloc\t\t\t\t\t\tfreq/){next;}
+	       else {
+		chomp;
+		my ($first, $last) = split (/\t{2}/, $_); #нужно разбить строку по табам так, чтоб слова (nграммы) до таба стали ключами словаря, а слова после таба - значениями. 
+		$freqDict{$first} = $last;		
+        	}
+	}
 	return %freqDict;
 	close $file;
 }
