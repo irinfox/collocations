@@ -2,7 +2,7 @@
 	//строки, кот. формируются по параметрам. 1ая для поиска файла (чтоб не считать, а сразу выдать), 2ая для запуска соотв. запросу программы
 	$filename = "";
 	$launch = "perl ";
-	$launchDict .= "perl ../newProgr/freqs_count.pl -f ";
+	$launchDict = "perl ../newProgr/freqs_count.pl -f ";
 	$launchDict1 = "perl ";
 	$dict1 = ""; //файл для поиска однословных частот для MI, tscore
 	$dict2 = ""; //файл для поиска Nсловных частот для MI, tscore
