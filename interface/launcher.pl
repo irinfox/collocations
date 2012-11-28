@@ -26,8 +26,8 @@ while (my $val = $str->fetchrow_hashref){
 	#print $tmpID;
 	my $launch = $val->{'launch'};
 	my $res_path = $val->{'path'};
-	my $upd = $dbh->prepare("UPDATE journal SET mode=1 WHERE numb=$tmpID") or die $dbh->errstr;
-	$upd->execute();
+	my $upd = $dbh->prepare("UPDATE journal SET mode=1 WHERE numb=?") or die $dbh->errstr;
+	$upd->execute($tmpID);
 	system("$launch > $res_path")==0;
 	if ($?==-1){
 		print "failed to execute: $!\n";
@@ -41,8 +41,8 @@ while (my $val = $str->fetchrow_hashref){
 	}
 	#нужно проверить результат работы программы и записать, что скрипт отработал => можно забирать результат	
 	if (-e $res_path){
-		my $upd2 = $dbh->prepare("UPDATE journal SET mode=2 WHERE numb=$tmpID") or die $dbh->errstr;
-		$upd2->execute();
+		my $upd2 = $dbh->prepare("UPDATE journal SET mode=2 WHERE numb=?") or die $dbh->errstr;
+		$upd2->execute($tmpID);
 	}
 }
 
