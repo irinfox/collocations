@@ -6,20 +6,7 @@
 	<meta name="keywords" content="collocations,MI,t-score,mutual information">
 	<meta name="description" content="Collocations">
 	<meta name="Generator" content="Notepad++">
-	<style type="text/css">
-
-	   body, input, select { font-family: Verdana,Arial,sans-serif;  
-	   font-size: 9pt; 
-	   color: 8B0000; background-color: #E6E6FA;}
-	   p {font-weight: bold;}
-	   .required {color:red; display:none; font-weight: bold;}
-	   #params {display: none;}
-	   #bound {display: none;}
-	   #journal {display: none;}
-	   #freq {display: none;}
-		.vvod{background-color: #FFF;}
-	</style>
-
+	<link rel="stylesheet" href="style.css" type="text/css">
 	<script type="text/javascript">
 		function show(name){
 			document.getElementById(name).style.display = 'block';
@@ -125,69 +112,77 @@
 </head>
 
 <body>
-	<h1>Collocations</h1>
-	<form name = "f" action = "index.php" method = "get">
-	<div id="metrics" > <!--div для метрик -->
-		<p>Выберите метрику: <span class="required" id="metr">Вы не выбрали метрику!</span></p>
-		<label>Для извлечения единиц анализа:</label><br><br>
-		<label><input type="radio" name="metricR" value="freqDict" onclick="show('params'), hide('bound'), show('freq')">Частотный словарь  </label>
-		<label><input type="radio" name="metricR" value="MI" onclick="show('params'), show('bound'), hide('freq')">MI  </label>
-		<label><input type="radio" name="metricR" value="tscore" onclick="hide('params'), show('bound'), hide('freq')">T-score  </label>
-		<label><input type="radio" name="metricR" value="Dice" onclick="hide('params'),hide('bound'), hide('freq')">Dice  </label>
-		<label><input type="radio" name="metricR" value="LL" onclick="hide('params'),hide('bound'), hide('freq')">LogLikelihood  </label><br><br><br>
-		<label>Для взвешивания единиц анализа:</label><br><br>
-		<label><input type="radio" name="metricW" value="Tf-idf" onclick="hide('params'), hide('bound'), hide('freq')">Tf-idf  </label>
-		<label><input type="radio" name="metricW" value="Wierdness" onclick="hide('params'), hide('bound'), hide('freq')">Wierdness  </label>
-		<label><input type="radio" name="metricW" value="locglob" onclick="hide('params'), hide('bound'), hide('freq')">локальная/глобальная частота</label><br><br><br>
-	</div>
-	<div id="freq">
-	<p>Частоты:</p>
-	<label><input type="radio" name="freqs" value="abs" checked>абсолютные</label>
-	<label><input type="radio" name="freqs" value="rel">относительные</label>
-	<label><input type="checkbox" name="ipm" value="ipm">ipm</label><br><br>	
-	</div>
-	<p>Считать метрику по:</p>
-	<label><input type="radio" name="param1" value="lemm" checked>леммам</label>
-	<label><input type="radio" name="param1" value="word">словоформам</label><br><br>
-	<div id="params" >
-		<p>Считать метрику для: <span id="gram" class="required">Выберите для чего считать метрику.</span></p>
-		<label><input type="radio" name="grams" value="1" checked>однословных</label><br>
-		<label><input type="radio" name="grams" value="2">биграмм</label><br>
-		<label><input type="radio" name="grams" value="3">триграмм</label><br>
-		<label><input type="radio" name="grams" value="4">четырёхсловных</label><br>
-		<label><input type="radio" name="grams" value="5">пятисловных</label><br>	
-		<label>Другое: <input type="text" class="vvod" name="gram" value="" size="10" onfocus="uncheck('grams')"></label><br>	
-	</div>
-	<p>Дополнительные параметры:</p>
-	<label><input type="checkbox" name="dop" value="punct">Исключить пунктуацию</label><br>
-	<label><input type="checkbox" name="dop" value="lowcase">Перевести в нижний регистр</label><br>
-	<label><input type="checkbox" name="dop" value="digit">Исключить цифры</label><br>
-	<label><input type="checkbox" name="dop" value="cyr">Исключить латиницу</label><br><br>
-	<label>Записать только топ <input type="text" class="vvod" name="top" value="1000"> слов</label><br><br>
-	<!--выводить только для MI-->
-	<div id="bound">
-		<label style="font-weight:bold;">Порог отсечения частот: <input type="text" name="b" class="vvod" value="2"></label><br><br>		
-	</div>
-	<div id="collections">
-		<select name="collection" size="1" class="vvod">
-		<option value="q">выберите коллекцию</option>
-		<option value="vz">Взгляд</option>
-		<option value="corp">Корпусная</option>
-		<option value="ng">Независимая газета</option>
-    </select> <span id="collec" class="required">Выберите коллекцию</span><br><br>	
-	</div>
-	<label>Введите имя результирующего файла: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">Имя файлу будет присвоено автоматически</span><br><br>
-	<input type="submit" name="start" value="Обработать" onClick="process()"><!--по клику должен показываться нижний див и запускаться обработка коллекции--><br><br>
-	
-	
-	
-	<!--<a name="end"></a>-->
-	<p><textarea id="journal" name="journal" cols="80" rows="15" readonly style="display:none; border:tomato solid 1px; padding: 10px">
-       </textarea></p>
-	</form>	
-	<div id="bottom">
-		Все <a href="http://code.google.com/p/collocations/source/browse/#svn%2Ftrunk" title="Программы, SVN">программы</a> и <a href="http://code.google.com/p/collocations/wiki/Documentation" title="Wiki документация">документация к ним</a> находятся в открытом доступе.
-		<p>&copy;Крылова Ирина</p>
-	</div>
+    <div id="wrap">
+       <div id="header">
+            <ul class="top-menu">
+				<li><a href="main.html" title="Collocations main"><b>Выбор коллекции</b></a></li>
+				<li><a href="download.php" title="Download">Скачать</a></li>
+		    </ul>
+			<h1>Collocations</h1>
+	    </div>
+        <div id="container"> 		
+			<form name = "f" action = "index.php" method = "get">
+			<div id="metrics" > <!--div для метрик -->
+				<p>Выберите метрику: <span class="required" id="metr">Вы не выбрали метрику!</span></p>
+				<label>Для извлечения единиц анализа:</label><br><br>
+				<label><input type="radio" name="metricR" value="freqDict" onclick="show('params'), show('extra'),hide('bound'), show('freq')">Частотный словарь  </label>
+				<label><input type="radio" name="metricR" value="MI" onclick="show('params'),hide('extra'), show('bound'), hide('freq')">MI  </label>
+				<label><input type="radio" name="metricR" value="tscore" onclick="hide('params'), show('bound'), hide('freq')">T-score  </label>
+				<label><input type="radio" name="metricR" value="Dice" onclick="hide('params'),hide('bound'), hide('freq')">Dice  </label>
+				<label><input type="radio" name="metricR" value="LL" onclick="hide('params'),hide('bound'), hide('freq')">LogLikelihood  </label><br><br><br>
+				<label>Для взвешивания единиц анализа:</label><br><br>
+				<label><input type="radio" name="metricW" value="Tf-idf" onclick="hide('params'), hide('bound'), hide('freq')">Tf-idf  </label>
+				<label><input type="radio" name="metricW" value="Wierdness" onclick="hide('params'), hide('bound'), hide('freq')">Wierdness  </label>
+				<label><input type="radio" name="metricW" value="locglob" onclick="hide('params'), hide('bound'), hide('freq')">локальная/глобальная частота</label><br><br><br>
+			</div>
+			<div id="freq">
+			<p>Частоты:</p>
+			<label><input type="radio" name="freqs" value="abs" checked>абсолютные</label>
+			<label><input type="radio" name="freqs" value="rel">относительные</label>
+			<label><input type="checkbox" name="ipm" value="ipm">ipm</label><br><br>	
+			</div>
+			<p>Считать метрику по:</p>
+			<label><input type="radio" name="param1" value="lemm" checked>леммам</label>
+			<label><input type="radio" name="param1" value="word">словоформам</label><br><br>
+			<div id="params" >
+				<p>Считать метрику для: <span id="gram" class="required">Выберите для чего считать метрику.</span></p>
+				<label id="extra"><input type="radio" name="grams" value="1">однословных</label>
+				<label><input type="radio" name="grams" value="2" checked>биграмм</label><br>
+				<label><input type="radio" name="grams" value="3">триграмм</label><br>
+				<label><input type="radio" name="grams" value="4">четырёхсловных</label><br>
+				<label><input type="radio" name="grams" value="5">пятисловных</label><br>	
+				<label>Другое: <input type="text" class="vvod" name="gram" value="" size="10" onfocus="uncheck('grams')"></label><br>	
+			</div>
+			<p>Дополнительные параметры:</p>
+			<label><input type="checkbox" name="dop" value="punct">Исключить пунктуацию</label><br>
+			<label><input type="checkbox" name="dop" value="lowcase">Перевести в нижний регистр</label><br>
+			<label><input type="checkbox" name="dop" value="digit">Исключить цифры</label><br>
+			<label><input type="checkbox" name="dop" value="cyr">Исключить латиницу</label><br><br>
+			<label>Записать только топ <input type="text" class="vvod" name="top" value="1000"> слов</label><br><br>
+			<!--выводить только для MI-->
+			<div id="bound">
+				<label style="font-weight:bold;">Порог отсечения частот: <input type="text" name="b" class="vvod" value="2"></label><br><br>		
+			</div>
+			<div id="collections">
+				<select name="collection" size="1" class="vvod">
+				<option value="q">выберите коллекцию</option>
+				<option value="vz">Взгляд</option>
+				<option value="corp">Корпусная</option>
+				<option value="ng">Независимая газета</option>
+			</select> <span id="collec" class="required">Выберите коллекцию</span><br><br>	
+			</div>
+			<label>Введите имя результирующего файла: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">Имя файлу будет присвоено автоматически</span><br><br>
+			<input type="submit" name="start" value="Обработать" onClick="process()"><!--по клику должен показываться нижний див и запускаться обработка коллекции--><br><br>
+
+			<!--<a name="end"></a>-->
+			<p><textarea id="journal" name="journal" cols="80" rows="15" readonly style="display:none; border:tomato solid 1px; padding: 10px">
+			   </textarea></p>
+			</form>	
+		</div>
+		<div id="bottom">
+			Все <a href="http://code.google.com/p/collocations/source/browse/#svn%2Ftrunk" title="Программы, SVN">программы</a> и <a href="http://code.google.com/p/collocations/wiki/Documentation" title="Wiki документация">документация к ним</a> находятся в открытом доступе.
+			<p>&copy;Крылова Ирина</p>
+		</div>
+	</div>	
 </body>
 </html>

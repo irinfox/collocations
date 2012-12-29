@@ -155,7 +155,7 @@
 			if (!file_exists($path.$dict1) &&  file_exists($path.$dict2)){ //no unigram freqDict
 				
 				echo "<br>униграммный ".$launchDict1;
-				mysql_query("insert into journal values(NULL'".mysql_real_escape_string($launchDict1)."','".mysql_real_escape_string($path.$dict1)."', 0)");
+				mysql_query("insert into journal values(NULL,'".mysql_real_escape_string($launchDict1)."','".mysql_real_escape_string($path.$dict1)."', 0)");
 				
 				$launch .= " -f $path$dict2 -h $path$dict1 ";
 				echo "<br>запускаю программу два  ".$launch;
@@ -192,7 +192,6 @@
 print "<br><br><b>This is how journal looks like:</b><br><br>";
    $sql="select * from journal";
    $result = mysql_query($sql);
-
    $table="<form method='get' action='index.php'><table border=1><tr><td>ID<td>launch_path<td>res_path<td>mode";
    while ($line = mysql_fetch_assoc($result)){
       $iD = $line['numb']." ";
@@ -201,8 +200,11 @@ print "<br><br><b>This is how journal looks like:</b><br><br>";
       $mode = $line['mode'];
       $table.= "<tr><td>$iD<td>$launch_path<td>$res_path<td>$mode";
    };
-   print $table;
+      print $table;
+
 ?>
 
+<!--
 <form method="get" action="index.php">
 </form>
+-->

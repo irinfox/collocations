@@ -28,7 +28,7 @@ my $sum = 0;
    $sum += $value; 
 }
 my $N_words = $sum;
-#print $N_words;
+print $N_words;
 
 my $bu;
 if (!$opts{'b'}){$bu = 2;}

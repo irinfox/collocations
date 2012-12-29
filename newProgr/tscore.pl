@@ -91,8 +91,9 @@ sub print_Metric {
 
 #####################################
 sub readFile{
-	open my $file, $_[0] or die "Failed to open file: $!";
-    	binmode ($file, ":encoding(utf8)");
+	#print $_[0]; 
+	open my $file, $_[0] or die "Failed to open file: $!, $_[0]";
+   	binmode ($file, ":encoding(utf8)");
 	my %freqDict;
         while (<$file>) {
                if ($_ =~ m/colloc\t\t\t\t\t\tfreq/){next;}
