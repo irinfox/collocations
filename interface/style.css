@@ -1,0 +1,38 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+body, input, select { font-family: Verdana,Arial,sans-serif;  
+   font-size: 9pt; 
+   color: 8B0000; background-color: #E6E6FA;}
+p {font-weight: bold;}
+.required {color:red; display:none; font-weight: bold;}
+#params {display: none;}
+#bound {display: none;}
+#journal {display: none;}
+#freq {display: none;}
+.vvod{background-color: #FFF;}
+
+#wrap{position: relative;}
+#container{position:relative;overflow:auto;}
+#bottom {position: absolute; bottom: -80; }
+
+	
+ul.top-menu {
+	margin: 0; /* Обнуляем значение отступов */
+	padding: 4px; /* Значение полей */
+	border-bottom: 1px solid #000;
+   }
+ul.top-menu li {
+	display: inline; /* Отображать как строчный элемент */
+	margin-right: 5px; /* Отступ слева */
+	padding: 3px; /* Поля вокруг текста */
+}
+
+a {
+	color: #191970;
+	text-decoration:none;
+ }
+a:hover{
+	background-color: #FFFFF0;
+}
