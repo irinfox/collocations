@@ -7,11 +7,6 @@
 	<meta name="description" content="Collocations">
 	<meta name="Generator" content="Notepad++">
 	<link rel="stylesheet" href="style.css" type="text/css">
-	<style>
-	 /* #wrap{position:relative;}
-	  #container{position:relative;}
-	  #bottom {position:absolute; bottom:0;}*/
-	</style>
 </head>
 
 <body>
@@ -52,7 +47,7 @@
 				
 				//print $result;/*	*/				
 			?>
-			</form>
+		<!--	</form>-->
 		</div>
 		<div id="bottom">
 			Все <a href="http://code.google.com/p/collocations/source/browse/#svn%2Ftrunk" title="Программы, SVN">программы</a> и <a href="http://code.google.com/p/collocations/wiki/Documentation" title="Wiki документация">документация к ним</a> находятся в открытом доступе.
