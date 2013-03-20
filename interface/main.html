@@ -116,7 +116,7 @@
        <div id="header">
             <ul class="top-menu">
 				<li><a href="main.html" title="Collocations main"><b>Выбор коллекции</b></a></li>
-				<li><a href="download.php" title="Download">Скачать</a></li>
+				<li><a href="download.php" title="Download">Готовые файлы</a></li>
 		    </ul>
 			<h1>Collocations</h1>
 	    </div>
@@ -128,12 +128,12 @@
 				<label><input type="radio" name="metricR" value="freqDict" onclick="show('params'), show('extra'),hide('bound'), show('freq')">Частотный словарь  </label>
 				<label><input type="radio" name="metricR" value="MI" onclick="show('params'),hide('extra'), show('bound'), hide('freq')">MI  </label>
 				<label><input type="radio" name="metricR" value="tscore" onclick="hide('params'), show('bound'), hide('freq')">T-score  </label>
-				<label><input type="radio" name="metricR" value="Dice" onclick="hide('params'),hide('bound'), hide('freq')">Dice  </label>
+		<!--		<label><input type="radio" name="metricR" value="Dice" onclick="hide('params'),hide('bound'), hide('freq')">Dice  </label>
 				<label><input type="radio" name="metricR" value="LL" onclick="hide('params'),hide('bound'), hide('freq')">LogLikelihood  </label><br><br><br>
 				<label>Для взвешивания единиц анализа:</label><br><br>
 				<label><input type="radio" name="metricW" value="Tf-idf" onclick="hide('params'), hide('bound'), hide('freq')">Tf-idf  </label>
-				<label><input type="radio" name="metricW" value="Wierdness" onclick="hide('params'), hide('bound'), hide('freq')">Wierdness  </label>
-				<label><input type="radio" name="metricW" value="locglob" onclick="hide('params'), hide('bound'), hide('freq')">локальная/глобальная частота</label><br><br><br>
+				<label><input type="radio" name="metricW" value="Weirdness" onclick="hide('params'), hide('bound'), hide('freq')">Wierdness  </label>
+				<label><input type="radio" name="metricW" value="locglob" onclick="hide('params'), hide('bound'), hide('freq')">локальная/глобальная частота</label><br><br><br>	-->	
 			</div>
 			<div id="freq">
 			<p>Частоты:</p>
@@ -151,7 +151,8 @@
 				<label><input type="radio" name="grams" value="3">триграмм</label><br>
 				<label><input type="radio" name="grams" value="4">четырёхсловных</label><br>
 				<label><input type="radio" name="grams" value="5">пятисловных</label><br>	
-				<label>Другое: <input type="text" class="vvod" name="gram" value="" size="10" onfocus="uncheck('grams')"></label><br>	
+				<!--<label>Другое: <input type="text" class="vvod" name="gram" value="" size="10" onfocus="uncheck('grams')"></label><br>	
+			-->
 			</div>
 			<p>Дополнительные параметры:</p>
 			<label><input type="checkbox" name="dop" value="punct">Исключить пунктуацию</label><br>
@@ -171,7 +172,8 @@
 				<option value="ng">Независимая газета</option>
 			</select> <span id="collec" class="required">Выберите коллекцию</span><br><br>	
 			</div>
-			<label>Введите имя результирующего файла: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">Имя файлу будет присвоено автоматически</span><br><br>
+			<!-- <label>Введите имя результирующего файла: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">Имя файлу будет присвоено автоматически</span><br><br>
+			-->
 			<input type="submit" name="start" value="Обработать" onClick="process()"><!--по клику должен показываться нижний див и запускаться обработка коллекции--><br><br>
 
 			<!--<a name="end"></a>-->
