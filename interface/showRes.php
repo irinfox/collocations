@@ -19,39 +19,33 @@
 			<h1>Collocations</h1>
 	</div>
         <div id="container"> 		
-			<!--<form>
-			код для обращения к БД и выводу файлов с mode=2-->
-			<?php
-				$host = "localhost";
-				$login = "colloc";
-				$PWD = "H4eSaa1L";
-				$dbCon = mysql_connect($host,$login, $PWD);
-				//проверка
-				//print "код ошибки: ". mysql_error();
-				//print "<br>Connected with ID: ".$dbCon."<br>"; 
-                //к журналу
-	            $dbName = "collocs";
-	            mysql_select_DB($dbName, $dbCon);
-				
-			    $result = mysql_query("select * from journal where mode=2", $dbCon);
-			    $result2 = mysql_query("SELECT * FROM journal WHERE mode=2", $dbCon);
-				
-				print "<b>Обработанные файлы, доступные для скачивания:</b><br><br>";
-                
-				while ($line = mysql_fetch_array($result)){
-				  //$res_path = $line['path']." ";
-				  //$res_path = $line[0];
-				   //print $res_path."<br>";
-				   if ($line['name'] == ''){
-				   	print "<a href=".$line['path'].">".basename($line['path'])."</a><br>";
-				   }else{
-				   	print "<a href=".$line['path'].">".$line['name']."</a><br>";
-				   }
-				}
-				
-				//print $result;/*	*/				
-			?>
-		<!--	</form>-->
+<?php
+
+	if ($_GET['file']!=null){
+		//show existing file on the page
+		if($_GET['res'==""]{echo "Файл уже обработан: <a href=".$_GET['file'].">".$_GET['file']."</a><br>";} 
+	
+		 else {echo "Файл уже обработан: <a href=".$_GET['file'].">".$_GET['res']."</a><br>";} 
+		 echo "Top 50: <br>";
+		 $handle = @fopen($_GET['file'], "r");
+		 if ($handle){
+		     ini_set("auto_detect_line_endings", true); //instead of length parameter 
+		 	while(($buffer = fgets($handle)) <= 50){
+                		echo $buffer."<br>";
+			 } 
+		  }
+			if (!feof($handle)){
+			  echo "Error: unexpected fgets() fail\n";
+			}
+			fclose($handle);	
+		}
+	
+		if($_GET['name']!=null){
+			echo $_GET['name'];
+		}
+
+
+	?>
 		</div>
 		<div id="bottom">
 			Все <a href="http://code.google.com/p/collocations/source/browse/#svn%2Ftrunk" title="Программы, SVN">программы</a> и <a href="http://code.google.com/p/collocations/wiki/Documentation" title="Wiki документация">документация к ним</a> находятся в открытом доступе.

@@ -66,8 +66,8 @@ sub readFile{
 	my $x;
         while (<$file>) {
             $N++;
-	        @variants = split;#разбитая по пробелам строка из аот-файла. 
 	        chomp;
+	        @variants = split;#разбитая по пробелам строка из аот-файла. 
 	        if ($opts{'w'}) {
              #     $x++;
 				$x = $variants[0];

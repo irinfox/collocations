@@ -48,63 +48,79 @@
 			}
 		}	
 		function process(){
-			var s = '';
+		//	var s = '';
+			var allright = Boolean(true);
 			with(document.f){
-				if (checkedRadio(metricR) == null || checkedRadio(metricW) == null ){
+				//if (checkedRadio(metricR) == null || checkedRadio(metricW) == null ){
+				if (checkedRadio(metricR) == null){
 					document.getElementById('metr').style.display = 'inline';
-					return ;
+					allright = false;
+					return false;
 				}
-				else {document.getElementById('metr').style.display = 'none'; }
+				else {
+					document.getElementById('metr').style.display = 'none'; 
+					allright = true;
+				}
 				if (collection.options[collection.selectedIndex].value == "q"){
 					document.getElementById('collec').style.display = 'inline';
-					return ;
+					allright = false;
+					return false;
 				}
-				else {document.getElementById('collec').style.display = 'none'; }
+				else {
+					document.getElementById('collec').style.display = 'none'; 
+					allright = true;
+				}
 				
-				s += "На коллекции "+ collection.options[collection.selectedIndex].value +" будет запущена метрика \"" + checkedRadio(metric) + "\" с параметрами: \n "; 
-				s += checkedRadio(freqs)+" частоты; ";
-				if (ipm.checked) s += "посчитать " + ipm.value + "; ";
-				s += "по " + checkedRadio(param1) + ". "; //word, lemma
+			//	s += "На коллекции "+ collection.options[collection.selectedIndex].value +" будет запущена метрика \"" + checkedRadio(metricR) + "\" с параметрами: \n "; 
+			//	s += checkedRadio(freqs)+" частоты; ";
+			//	if (ipm.checked) s += "посчитать " + ipm.value + "; ";
+			//	s += "по " + checkedRadio(param1) + ". "; //word, lemma
 				
-				if (checkedRadio(metric) == "MI" || checkedRadio(metric) == "Частотный словарь"){
+				if (checkedRadio(metricR) == "MI" || checkedRadio(metricR) == "Частотный словарь"){
 					if (checkedBoxes(grams) == "" && gram.value == ""){
 						document.getElementById('gram').style.display = 'inline';
-						return ;
+						allright = false;
+						return false;
 					}
-					else {document.getElementById('gram').style.display = 'none'; 
-					
-					s += "Для ";
-					if (checkedRadio(grams) != "") {s += checkedRadio(grams);} //ngramms
-					if (checkedRadio(grams) != "" && gram.value != ""){s += " и ";}
-					if (gram.value != ""){s += gram.value +"грамм";}
-					s += ". ";
+					else {
+						document.getElementById('gram').style.display = 'none';	
+						allright = true;
 					}
+			//		s += "Для ";
+			//		if (checkedRadio(grams) != "") {s += checkedRadio(grams);} //ngramms
+			//		if (checkedRadio(grams) != "" && gram.value != ""){s += " и ";}
+			//		if (gram.value != ""){s += gram.value +"грамм";}
+			//		s += ". ";
 				}
 				
+				
 				//если введено
-				if(top.value != "") {
-					s += "Записать " + top.value + " топ-слов. ";
-				}
+			//	if(top.value != "") {
+			//		s += "Записать " + top.value + " топ-слов. ";
+			//	}
 				
 				
 				//порог отсечения
-				if(b.value != 2) {
-					s += "Использовать порог отсечения по частоте = " + b.value + ".";
-				}
+			//	if(b.value != 2) {
+			//		s += "Использовать порог отсечения по частоте = " + b.value + ".";
+			//	}
 				
 				//если есть, то такие, иначе не введены
-				if (checkedBoxes(dop) != "") {
-					s += "\nДополнительные параметры: \n" + checkedBoxes(dop) + ".";
-				}
-				else {s += "\nДополнительные параметры: не выбраны."}
-				if(resFileName.value != "") {
-					s += "Результирующий файл: " + resFileName.value + ".";
-				}
-				else{document.getElementById('fileName').style.display = 'inline';}	
-				journal.style.display = 'block';
+			//	if (checkedBoxes(dop) != "") {
+			//		s += "\nДополнительные параметры: \n" + checkedBoxes(dop) + ".";
+			//	}
+			//	else {s += "\nДополнительные параметры: не выбраны."}
+			//	if(resFileName.value != "") {
+			//		s += "Результирующий файл: " + resFileName.value + ".";
+			//	}
+				//else{document.getElementById('fileName').style.display = 'inline';}	
+			//	journal.style.display = 'block';
 				//location.hash = 'end';
-				journal.value = s;
+			//	journal.value = s;
 				
+				if (allright == true){
+				   document.getElementById('form_main').submit();
+				}
 				
 			}
 		}
@@ -121,7 +137,7 @@
 			<h1>Collocations</h1>
 	    </div>
         <div id="container"> 		
-			<form name = "f" action = "index.php" method = "get">
+			<form id="form_main" name = "f" action = "process.php" method = "get">
 			<div id="metrics" > <!--div для метрик -->
 				<p>Выберите метрику: <span class="required" id="metr">Вы не выбрали метрику!</span></p>
 				<label>Для извлечения единиц анализа:</label><br><br>
@@ -172,14 +188,14 @@
 				<option value="ng">Независимая газета</option>
 			</select> <span id="collec" class="required">Выберите коллекцию</span><br><br>	
 			</div>
-			<!-- <label>Введите имя результирующего файла: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">Имя файлу будет присвоено автоматически</span><br><br>
-			-->
-			<input type="submit" name="start" value="Обработать" onClick="process()"><!--по клику должен показываться нижний див и запускаться обработка коллекции--><br><br>
+			<label>Введите имя результирующего файла: <input type="text" class="vvod" name="resFileName" value=""></label><span id="fileName" class="required">Имя файлу будет присвоено автоматически</span><br><br>
+			
+			<input type="button" name="start" value="Обработать" onClick="process()"><br><br>
 
 			<!--<a name="end"></a>-->
-			<p><textarea id="journal" name="journal" cols="80" rows="15" readonly style="display:none; border:tomato solid 1px; padding: 10px">
+		<!--	<p><textarea id="journal" name="journal" cols="80" rows="15" readonly style="display:none; border:tomato solid 1px; padding: 10px">
 			   </textarea></p>
-			</form>	
+		-->	</form>	
 		</div>
 		<div id="bottom">
 			Все <a href="http://code.google.com/p/collocations/source/browse/#svn%2Ftrunk" title="Программы, SVN">программы</a> и <a href="http://code.google.com/p/collocations/wiki/Documentation" title="Wiki документация">документация к ним</a> находятся в открытом доступе.
