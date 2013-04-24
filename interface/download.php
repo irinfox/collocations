@@ -14,7 +14,7 @@
        <div id="header">
             <ul class="top-menu">
 				<li><a href="main.html" title="Collocations main"><b>Выбор коллекции</b></a></li>
-				<li><a href="download.html" title="Download">Готовые файлы</a></li>
+				<li><a href="download.php" title="Download">Готовые файлы</a></li>
 		    </ul>
 			<h1>Collocations</h1>
 	</div>
@@ -42,14 +42,17 @@
 				  //$res_path = $line['path']." ";
 				  //$res_path = $line[0];
 				   //print $res_path."<br>";
+				   
 				   if ($line['name'] == ''){
-				   	print "<a href=".$line['path'].">".basename($line['path'])."</a><br>";
+                                	#print "<a href=".$line['path'].">".basename($line['path'])."</a><br>";
+				      print "<a href=saveFile.php?flname=".basename($line['path'])."&flpath=".$line['path'].">".basename($line['path'])."</a><br>";  
+
 				   }else{
-				   	print "<a href=".$line['path'].">".$line['name']."</a><br>";
+				      print "<a href=saveFile.php?flname=".$line['name']."&flpath=".$line['path'].">".$line['name']."</a><br>";  
+				     # header("Location:saveFile.php?flname=".$line['name']."&flpath=".$line['path']);#выводим пользовательское имя файла
 				   }
 				}
 				
-				//print $result;/*	*/				
 			?>
 		<!--	</form>-->
 		</div>

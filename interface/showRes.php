@@ -14,7 +14,7 @@
        <div id="header">
             <ul class="top-menu">
 				<li><a href="main.html" title="Collocations main"><b>Выбор коллекции</b></a></li>
-				<li><a href="download.html" title="Download">Готовые файлы</a></li>
+				<li><a href="download.php" title="Download">Готовые файлы</a></li>
 		    </ul>
 			<h1>Collocations</h1>
 	</div>
@@ -23,9 +23,14 @@
 
 	if ($_GET['file']!=null){
 		//show existing file on the page
-		if($_GET['res'==""]{echo "Файл уже обработан: <a href=".$_GET['file'].">".$_GET['file']."</a><br>";} 
-	
-		 else {echo "Файл уже обработан: <a href=".$_GET['file'].">".$_GET['res']."</a><br>";} 
+		if($_GET['res']==""){
+			#echo "Файл уже обработан: <a href=".$_GET['file'].">".$_GET['file']."</a><br>";} 
+				      print "Файл уже обработан: <a href=saveFile.php?flname=".$_GET['file']."&flpath=".$_GET['file'].">".basename($_GET['file'])."</a><br>";  
+}	
+		 else {
+#echo "Файл уже обработан: <a href=".$_GET['file'].">".$_GET['res']."</a><br>";} 
+		      print "Файл уже обработан: <a href=saveFile.php?flname=".$_GET['res']."&flpath=".$_GET['file'].">".basename($_GET['file'])."</a><br>";  
+		}
 		 echo "Top 50: <br>";
 		 $handle = @fopen($_GET['file'], "r");
 		 if ($handle){
@@ -35,7 +40,7 @@
 			 } 
 		  }
 			if (!feof($handle)){
-			  echo "Error: unexpected fgets() fail\n";
+			  echo "END OF FILE\n";
 			}
 			fclose($handle);	
 		}
