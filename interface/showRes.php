@@ -25,7 +25,7 @@
 		//show existing file on the page
 		if($_GET['res']==""){
 			#echo "Файл уже обработан: <a href=".$_GET['file'].">".$_GET['file']."</a><br>";} 
-				      print "Файл уже обработан: <a href=saveFile.php?flname=".$_GET['file']."&flpath=".$_GET['file'].">".basename($_GET['file'])."</a><br>";  
+				      print "Файл уже обработан: <a href=saveFile.php?flname=".basename($_GET['file'])."&flpath=".$_GET['file'].">".basename($_GET['file'])."</a><br>";  
 }	
 		 else {
 #echo "Файл уже обработан: <a href=".$_GET['file'].">".$_GET['res']."</a><br>";} 
